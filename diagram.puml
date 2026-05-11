@@ -2,9 +2,6 @@
 skinparam packageStyle rectangle
 skinparam hide empty members
 
-' Aggregates define consistency boundaries
-' References between aggregates are done via identifiers
-
 package "Airport Aggregate" {
     class Airport <<aggregate root>> {
         - name : String
@@ -22,16 +19,37 @@ package "Airport Aggregate" {
     }
 
     class Timezone <<value object>>
+    class AirportType <<value object>> {
+        - type : String
+    }
     class AirportStatus <<value object>>
-    class Runway <<value object>>
-    class AircraftCertification <<value object>>
+
+    class Runway <<entity>> {
+        - designatorName : String
+        - length : double
+        - orientation : String
+    }
+
+    class AircraftCertification <<entity>> {
+        - validFrom : LocalDate
+        - validTo : LocalDate
+    }
+
+    class MediaImage <<entity>> {
+        - imageUrl : String
+        - description : String
+    }
 
     Airport "1" *-- "1" AirportCode
     Airport "1" *-- "1" Location
     Airport "1" *-- "1" Timezone
+    Airport "1" *-- "1" AirportType
     Airport "1" *-- "1" AirportStatus
-    Airport "1" *-- "0..*" Runway
-    Airport "1" *-- "0..*" AircraftCertification
+    Airport "1" *-- "1..*" Runway
+    Airport "1" *-- "1..*" AircraftCertification
+    Airport "1" *-- "0..*" MediaImage
+
+    AircraftCertification "1" --> "1" AircraftModelId : appliesToModel
 }
 
 package "Route Aggregate" {
@@ -44,13 +62,30 @@ package "Route Aggregate" {
         - minCapacity : int
     }
 
+    class RouteSchedule <<value object>> {
+        - operatingDays : String
+        - timeWindow : String
+    }
+
+    class RouteHistory <<entity>> {
+        - versionNumber : int
+        - modificationDate : LocalDateTime
+        - notes : String
+    }
+
     class FlightDuration <<value object>>
-    class RouteStatus <<value object>>
+    class RouteType <<value object>>
+    class RouteStatus <<value object>> {
+        - isActive : boolean
+    }
 
     Route "1" *-- "1" RouteId
     Route "1" *-- "1" RouteRequirement
     Route "1" *-- "1" FlightDuration
+    Route "1" *-- "1" RouteSchedule
+    Route "1" *-- "1" RouteType
     Route "1" *-- "1" RouteStatus
+    Route "1" *-- "0..*" RouteHistory
 
     Route "1" --> "1" AirportCode : originId
     Route "1" --> "1" AirportCode : destinationId
@@ -65,15 +100,21 @@ package "Aircraft Model Aggregate" {
     class Manufacturer <<value object>>
 
     class AircraftSpecs <<value object>> {
-        - seatingCapacity : int
-        - fuelCapacity : int
+        - maxCapacity : int
+        - fuelCapacity : double
         - maxRange : double
         - cruisingSpeed : double
+    }
+
+    class TechnicalDiagram <<entity>> {
+        - fileUrl : String
+        - diagramType : String
     }
 
     AircraftModel "1" *-- "1" AircraftModelId
     AircraftModel "1" *-- "1" Manufacturer
     AircraftModel "1" *-- "1" AircraftSpecs
+    AircraftModel "1" *-- "0..*" TechnicalDiagram
 }
 
 package "Aircraft Aggregate" {
@@ -85,9 +126,28 @@ package "Aircraft Aggregate" {
         - registration : String
     }
 
+    class SeatConfiguration <<value object>> {
+        - economySeats : int
+        - businessSeats : int
+        - totalCapacity : int
+    }
+
+    class OperationalMetrics <<value object>> {
+        - totalFlightHours : double
+        - currentRangeLimit : double
+    }
+
+    class AircraftFeatures <<value object>> {
+        - engineType : String
+        - hasWifi : boolean
+    }
+
     class AircraftStatus <<value object>>
 
     Aircraft "1" *-- "1" AircraftRegistration
+    Aircraft "1" *-- "1" SeatConfiguration
+    Aircraft "1" *-- "1" OperationalMetrics
+    Aircraft "1" *-- "1" AircraftFeatures
     Aircraft "1" *-- "1" AircraftStatus
 
     Aircraft "1" --> "1" AircraftModelId : modelId

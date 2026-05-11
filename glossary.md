@@ -5,7 +5,7 @@ Todos os conceitos aqui definidos correspondem diretamente às classes represent
 
 ---
 
-## ✈️ Aircraft Domain
+## Aircraft Domain
 
 ### Aircraft
 *(Entity, Aggregate Root)*  
@@ -21,7 +21,7 @@ Representa o estado operacional de um avião (ex: ativo, inativo, em manutençã
 
 ---
 
-## 🛩️ Aircraft Model Domain
+## Aircraft Model Domain
 
 ### AircraftModel
 *(Entity, Aggregate Root)*  
@@ -41,7 +41,7 @@ Contém as especificações técnicas do modelo de avião, incluindo capacidade 
 
 ---
 
-## 🛫 Airport Domain
+## Airport Domain
 
 ### Airport
 *(Entity, Aggregate Root)*  
@@ -73,7 +73,7 @@ Indica que um determinado modelo de avião está autorizado a operar num aeropor
 
 ---
 
-## 🗺️ Route Domain
+## Route Domain
 
 ### Route
 *(Entity, Aggregate Root)*  
@@ -97,7 +97,7 @@ Indica o estado da rota (ex: ativa, inativa).
 
 ---
 
-## ✈️ Scheduled Flight Domain
+## Scheduled Flight Domain
 
 ### ScheduledFlight
 *(Entity, Aggregate Root)*  
@@ -113,7 +113,7 @@ Define o horário do voo, incluindo data e hora de partida e chegada.
 
 ---
 
-## 🔧 Maintenance Template Domain
+## Maintenance Template Domain
 
 ### MaintenanceTemplate
 *(Entity, Aggregate Root)*  
@@ -133,7 +133,7 @@ Lista de tarefas a executar durante a manutenção.
 
 ---
 
-## 🔩 Maintenance Record Domain
+## Maintenance Record Domain
 
 ### MaintenanceRecord
 *(Entity, Aggregate Root)*  
@@ -157,7 +157,7 @@ Indica o estado da manutenção (ex: em curso, concluída).
 
 ---
 
-## 🔗 Relações entre Conceitos
+## Relações entre Conceitos
 
 - Um **Aircraft** está associado a um **AircraftModel**
 - Um **Route** liga dois **Airport**
@@ -167,7 +167,7 @@ Indica o estado da manutenção (ex: em curso, concluída).
 
 ---
 
-## 🧠 Notas de Modelação
+## Notas de Modelação
 
 - As **Entities** são identificadas por um identificador único e possuem identidade própria.
 - Os **Value Objects** são definidos apenas pelos seus atributos e são imutáveis.
