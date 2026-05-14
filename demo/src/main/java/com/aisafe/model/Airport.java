@@ -6,7 +6,7 @@ import jakarta.persistence.Column;
 import lombok.Data;
 
 @Entity
-@Data // Isto cria os Getters e Setters automaticamente graças ao Lombok
+@Data
 public class Airport {
 
     @Id
@@ -18,6 +18,4 @@ public class Airport {
     private String country;
     private String timezone;
     private String status; // OPERATIONAL, CLOSED, UNDER_MAINTENANCE
-
-    // Se o teu colega precisar de mais campos (pistas, etc), ele adiciona aqui depois
 }
