@@ -15,15 +15,20 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/h2-console/**",
+                                "/auth/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
-                                "/routes/**",
-                                "/airports/**",
-                                "/aircraft/**",
-                                "/aircraft-models/**"
+                                "/h2-console/**"
                         ).permitAll()
+
+                        .requestMatchers("/routes/**").permitAll()
+                        .requestMatchers("/api/airports/**").permitAll()
+                        .requestMatchers("/api/aircraft/**").permitAll()
+                        .requestMatchers("/api/aircraft-models/**").permitAll()
+                        .requestMatchers("/api/maintenance-records/**").permitAll()
+                        .requestMatchers("/api/maintenance-templates/**").permitAll()
+
                         .anyRequest().permitAll()
                 );
 
