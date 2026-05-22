@@ -27,5 +27,13 @@
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:7.0.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-config:7.0.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-config:7.0.5" level="project" />
+    <orderEntry type="library" name="Maven: io.swagger.core.v3:swagger-annotations-jakarta:2.2.43" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.hateoas:spring-hateoas:3.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.hateoas:spring-hateoas:3.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.hateoas:spring-hateoas:3.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.hateoas:spring-hateoas:3.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.hateoas:spring-hateoas:3.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-jpa:3.2.5" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-jpa:3.2.5" level="project" />
   </component>
 </module>

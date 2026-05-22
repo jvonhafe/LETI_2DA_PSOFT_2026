@@ -4,7 +4,11 @@ import com.aisafe.model.Airport;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AirportRepository extends JpaRepository<Airport, String> {
-    // Aqui o Spring faz a magia de ligar à Base de Dados sozinho
+
+    // US108
+    List<Airport> findByCityContainingIgnoreCase(String city);
 }
