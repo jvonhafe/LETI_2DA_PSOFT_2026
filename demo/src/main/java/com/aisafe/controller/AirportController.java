@@ -72,4 +72,24 @@ public class AirportController {
     public List<Airport> searchAirports(@RequestParam String city) {
         return airportRepository.findByCityContainingIgnoreCase(city);
     }
+
+    // ==========================================
+    // US109: Atualizar Estado do Aeroporto
+    // ==========================================
+    @PatchMapping("/{iata}/status")
+    @Operation(summary = "Atualizar Estado", description = "Atualiza o estado operacional de um aeroporto (US109).")
+    public Airport updateAirportStatus(@PathVariable String iata, @RequestParam String status) {
+
+        String statusUpper = status.toUpperCase();
+
+        if (!statusUpper.matches("^(OPERATIONAL|CLOSED|UNDER_MAINTENANCE)$")) {
+            throw new IllegalArgumentException("Estado inválido. Escolha entre: OPERATIONAL, CLOSED ou UNDER_MAINTENANCE");
+        }
+
+        Airport airport = airportRepository.findById(iata.toUpperCase())
+                .orElseThrow(() -> new ResourceNotFoundException("Aeroporto não encontrado com o código IATA: " + iata));
+
+        airport.setStatus(statusUpper);
+        return airportRepository.save(airport);
+    }
 }
