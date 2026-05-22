@@ -1,0 +1,30 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+package "US109 - Atualizar Estado do Aeroporto" {
+
+    class AirportController <<RestController>> {
+      + updateAirportStatus(iata: String, status: String): Airport
+    }
+
+    interface AirportRepository <<Repository>> {
+      + findById(id: String): Optional<Airport>
+      + save(airport: Airport): Airport
+    }
+
+    class Airport <<Entity>> {
+      - iataCode: String
+      - name: String
+      - city: String
+      - country: String
+      - timezone: String
+      - status: String
+      + setStatus(status: String): void
+    }
+
+    AirportController "1" --> "1" AirportRepository : uses >
+    AirportController ..> Airport : handles >
+    AirportRepository ..> Airport : retrieves / stores >
+}
+@enduml

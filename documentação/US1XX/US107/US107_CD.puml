@@ -1,0 +1,30 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+package "US107 - Obter/Listar Aeroportos" {
+
+    class AirportController <<RestController>> {
+      + getAirportById(iata: String): EntityModel<Airport>
+      + getAllAirports(): List<Airport>
+    }
+
+    interface AirportRepository <<Repository>> {
+      + findById(id: String): Optional<Airport>
+      + findAll(): List<Airport>
+    }
+
+    class Airport <<Entity>> {
+      - iataCode: String
+      - name: String
+      - city: String
+      - country: String
+      - timezone: String
+      - status: String
+    }
+
+    AirportController "1" --> "1" AirportRepository : uses >
+    AirportController ..> Airport : handles >
+    AirportRepository ..> Airport : retrieves >
+}
+@enduml

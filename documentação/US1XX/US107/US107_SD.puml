@@ -1,0 +1,32 @@
+@startuml
+autonumber
+skinparam packageStyle rectangle
+
+actor "Admin/User" as User
+participant "AirportController" as Ctrl
+participant "AirportRepository" as Repo
+database "Base de Dados" as DB
+
+User -> Ctrl : GET /api/airports/{iata}
+activate Ctrl
+
+Ctrl -> Repo : findById(iata.toUpperCase())
+activate Repo
+Repo -> DB : SELECT * FROM airport WHERE iata_code = ?
+activate DB
+DB --> Repo : Airport Record
+deactivate DB
+Repo --> Ctrl : Optional<Airport>
+deactivate Repo
+
+note right of Ctrl
+  O Controller envolve o
+  Airport num EntityModel
+  e adiciona os links HATEOAS
+end note
+
+Ctrl -> Ctrl : EntityModel.of(airport, links...)
+
+Ctrl --> User : OK
+deactivate Ctrl
+@enduml

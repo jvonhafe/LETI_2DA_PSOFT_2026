@@ -1,0 +1,42 @@
+@startuml
+autonumber
+skinparam packageStyle rectangle
+
+actor "Admin" as User
+participant "AirportController" as Ctrl
+participant "Airport" as Model
+participant "AirportRepository" as Repo
+database "Base de Dados" as DB
+
+User -> Ctrl : PATCH /api/airports/{iata}/status?status={newStatus}
+activate Ctrl
+
+note right of Ctrl: Valida se o status obedecem (OPERATIONAL, CLOSED, etc.)
+Ctrl -> Ctrl : statusUpper.matches(...)
+
+Ctrl -> Repo : findById(iata.toUpperCase())
+activate Repo
+Repo -> DB : SELECT * FROM airport
+activate DB
+DB --> Repo : Airport Record
+deactivate DB
+Repo --> Ctrl : Optional<Airport>
+deactivate Repo
+
+Ctrl -> Model : setStatus(statusUpper)
+activate Model
+Model --> Ctrl :
+deactivate Model
+
+Ctrl -> Repo : save(airport)
+activate Repo
+Repo -> DB : UPDATE airport SET status = ?
+activate DB
+DB --> Repo : success
+deactivate DB
+Repo --> Ctrl : updatedAirport
+deactivate Repo
+
+Ctrl --> User : OK (updatedAirport)
+deactivate Ctrl
+@enduml

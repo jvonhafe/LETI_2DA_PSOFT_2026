@@ -1,0 +1,28 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+package "US108 - Pesquisar Aeroportos por Cidade" {
+
+    class AirportController <<RestController>> {
+      + searchAirports(city: String): List<Airport>
+    }
+
+    interface AirportRepository <<Repository>> {
+      + findByCityContainingIgnoreCase(city: String): List<Airport>
+    }
+
+    class Airport <<Entity>> {
+      - iataCode: String
+      - name: String
+      - city: String
+      - country: String
+      - timezone: String
+      - status: String
+    }
+
+    AirportController "1" --> "1" AirportRepository : uses >
+    AirportController ..> Airport : handles >
+    AirportRepository ..> Airport : retrieves >
+}
+@enduml

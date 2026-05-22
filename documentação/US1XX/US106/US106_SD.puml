@@ -1,0 +1,33 @@
+@startuml
+autonumber
+skinparam packageStyle rectangle
+
+actor "User/Admin" as User
+participant "AirportController" as Ctrl
+participant "AirportRepository" as Repo
+database "Base de Dados" as DB
+
+User -> Ctrl : POST /api/airports (Airport Data)
+activate Ctrl
+
+Ctrl -> Repo : existsById(airport.getIataCode())
+activate Repo
+Repo -> DB : SELECT (procura por IATA)
+activate DB
+DB --> Repo : false (não existe)
+deactivate DB
+Repo --> Ctrl : false
+deactivate Repo
+
+Ctrl -> Repo : save(airport)
+activate Repo
+Repo -> DB : INSERT (guarda aeroporto)
+activate DB
+DB --> Repo : success
+deactivate DB
+Repo --> Ctrl : savedAirport
+deactivate Repo
+
+Ctrl --> User : Created (Airport)
+deactivate Ctrl
+@enduml

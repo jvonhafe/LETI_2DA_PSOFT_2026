@@ -1,0 +1,24 @@
+@startuml
+autonumber
+skinparam packageStyle rectangle
+
+actor "User" as User
+participant "AirportController" as Ctrl
+participant "AirportRepository" as Repo
+database "Base de Dados" as DB
+
+User -> Ctrl : GET /api/airports/search?city={city}
+activate Ctrl
+
+Ctrl -> Repo : findByCityContainingIgnoreCase(city)
+activate Repo
+Repo -> DB : SELECT * FROM airport WHERE city
+activate DB
+DB --> Repo : Lista de Aeroportos
+deactivate DB
+Repo --> Ctrl : List<Airport>
+deactivate Repo
+
+Ctrl --> User : OK (List<Airport>)
+deactivate Ctrl
+@enduml
