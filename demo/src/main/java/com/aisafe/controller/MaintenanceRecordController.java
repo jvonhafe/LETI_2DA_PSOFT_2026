@@ -1,7 +1,9 @@
 package com.aisafe.controller;
 
-import com.aisafe.service.MaintenanceService;
 import com.aisafe.model.MaintenanceRecord;
+import com.aisafe.service.MaintenanceService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@Tag(
+        name = "Maintenance Records",
+        description = "Gestão de Registos de Manutenção (US115, US116, US117, US119)"
+)
 @RestController
 @RequestMapping("/api/maintenance-records")
 public class MaintenanceRecordController {
@@ -20,17 +26,20 @@ public class MaintenanceRecordController {
         this.maintenanceService = maintenanceService;
     }
 
+    @Operation(summary = "Criar Registo de Manutenção")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MaintenanceRecord createRecord(@Valid @RequestBody MaintenanceRecord record) {
         return maintenanceService.createRecord(record);
     }
 
+    @Operation(summary = "Listar Registos de Manutenção por Aeronave")
     @GetMapping("/aircraft/{registration}")
     public List<MaintenanceRecord> recordsForAircraft(@PathVariable String registration) {
         return maintenanceService.recordsForAircraft(registration);
     }
 
+    @Operation(summary = "Ver Total de Horas de Manutenção de uma Aeronave")
     @GetMapping("/aircraft/{registration}/hours")
     public Map<String, Object> totalHoursForAircraft(@PathVariable String registration) {
         return Map.of(
@@ -39,6 +48,7 @@ public class MaintenanceRecordController {
         );
     }
 
+    @Operation(summary = "Ver Total de Horas de Manutenção da Frota")
     @GetMapping("/fleet/hours")
     public Map<String, Object> totalHoursForFleet() {
         return Map.of(
@@ -47,6 +57,7 @@ public class MaintenanceRecordController {
         );
     }
 
+    @Operation(summary = "Completar Registo de Manutenção")
     @PatchMapping("/{recordId}/complete")
     public MaintenanceRecord completeRecord(
             @PathVariable String recordId,
