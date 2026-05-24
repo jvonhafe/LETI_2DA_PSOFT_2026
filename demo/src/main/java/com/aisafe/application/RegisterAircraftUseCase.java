@@ -7,6 +7,7 @@ import com.aisafe.model.AircraftRegistration;
 import com.aisafe.repository.AircraftModelRepository;
 import com.aisafe.repository.AircraftRepository;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 
 @Service
@@ -28,7 +29,7 @@ public class RegisterAircraftUseCase {
         }
 
         if (!modelRepository.existsById(modelId)) {
-            throw new ResourceNotFoundException("Modelo '" + modelId + "' não encontrado.");
+            throw new ResourceNotFoundException("Modelo de aeronave não encontrado.");
         }
 
         Aircraft aircraft = new Aircraft();

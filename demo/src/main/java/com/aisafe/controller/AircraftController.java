@@ -5,8 +5,8 @@ import com.aisafe.core.exception.AircraftNotFoundException;
 import com.aisafe.model.Aircraft;
 import com.aisafe.model.AircraftRegistration;
 import com.aisafe.repository.AircraftRepository;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,8 +29,9 @@ public class AircraftController {
 
     @GetMapping("/{registration}")
     public Aircraft getAircraftDetails(@PathVariable String registration) {
-        return aircraftRepository.findById(new AircraftRegistration(registration))
-                .orElseThrow(() -> new AircraftNotFoundException(registration)); // Exceção customizada aqui!
+        AircraftRegistration regVo = new AircraftRegistration(registration);
+        return aircraftRepository.findById(regVo)
+                .orElseThrow(() -> new AircraftNotFoundException(registration));
     }
 
     @GetMapping("/search")
@@ -40,9 +41,10 @@ public class AircraftController {
         return aircraftRepository.searchAircrafts(modelId, status, year);
     }
 
-    @Valid @PatchMapping("/{registration}/status")
+    @PatchMapping("/{registration}/status")
     public Aircraft updateStatus(@PathVariable String registration, @RequestParam String newStatus) {
-        Aircraft aircraft = aircraftRepository.findById(new AircraftRegistration(registration))
+        AircraftRegistration regVo = new AircraftRegistration(registration);
+        Aircraft aircraft = aircraftRepository.findById(regVo)
                 .orElseThrow(() -> new AircraftNotFoundException(registration));
 
         aircraft.setStatus(newStatus.toUpperCase());

@@ -1,15 +1,16 @@
 package com.aisafe.repository;
 
 import com.aisafe.model.Aircraft;
-import com.aisafe.model.AircraftRegistration; // Importa o novo ID
+import com.aisafe.model.AircraftRegistration;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository
-public interface AircraftRepository extends JpaRepository<Aircraft, AircraftRegistration> { // 🧠 ID alterado aqui!
+public interface AircraftRepository extends JpaRepository<Aircraft, AircraftRegistration> {
 
     @Query("SELECT a FROM Aircraft a WHERE " +
             "(:modelId IS NULL OR a.modelId = :modelId) AND " +

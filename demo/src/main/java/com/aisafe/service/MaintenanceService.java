@@ -2,6 +2,7 @@ package com.aisafe.service;
 
 import com.aisafe.core.exception.ResourceNotFoundException;
 import com.aisafe.model.Aircraft;
+import com.aisafe.model.AircraftRegistration;
 import com.aisafe.model.MaintenanceRecord;
 import com.aisafe.model.MaintenanceTemplate;
 import com.aisafe.repository.AircraftRepository;
@@ -28,144 +29,64 @@ public class MaintenanceService {
         this.aircraftRepository = aircraftRepository;
     }
 
-    public MaintenanceTemplate createTemplate(
-            MaintenanceTemplate template
-    ) {
+    public MaintenanceTemplate createTemplate(MaintenanceTemplate template) {
         return templateRepository.save(template);
     }
 
-    public MaintenanceRecord createRecord(
-            MaintenanceRecord record
-    ) {
+    public MaintenanceRecord createRecord(MaintenanceRecord record) {
+        AircraftRegistration registration = new AircraftRegistration(record.getAircraftRegistration());
 
-        Aircraft aircraft =
-                aircraftRepository.findByRegistrationNumber(
-                                record.getAircraftRegistration()
-                        )
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Aircraft not found"
-                                )
-                        );
+        Aircraft aircraft = aircraftRepository.findById(registration)
+                .orElseThrow(() -> new ResourceNotFoundException("Aircraft not found"));
 
-        MaintenanceTemplate template =
-                templateRepository
-                        .findById(
-                                record.getTemplateId()
-                        )
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Maintenance template not found"
-                                )
-                        );
+        String templateIdStr = record.getTemplateId() != null ? String.valueOf(record.getTemplateId()) : null;
 
-        if (
-                record.getChecklist() == null ||
-                        record.getChecklist().isEmpty()
-        ) {
-            record.setChecklist(
-                    template.getChecklist()
-            );
+        MaintenanceTemplate template = templateRepository.findById(templateIdStr)
+                .orElseThrow(() -> new ResourceNotFoundException("Maintenance template not found"));
+
+        if (record.getChecklist() == null || record.getChecklist().isEmpty()) {
+            record.setChecklist(template.getChecklist());
         }
 
-        aircraft.setStatus(
-                "UNDER_MAINTENANCE"
-        );
+        aircraft.setStatus("UNDER_MAINTENANCE");
+        aircraftRepository.save(aircraft);
 
-        aircraftRepository.save(
-                aircraft
-        );
-
-        return recordRepository.save(
-                record
-        );
+        return recordRepository.save(record);
     }
 
-    public List<MaintenanceRecord>
-    recordsForAircraft(
-            String registration
-    ) {
-
-        if (
-                !aircraftRepository.existsById(
-                        registration
-                )
-        ) {
-            throw new ResourceNotFoundException(
-                    "Aircraft not found"
-            );
+    public List<MaintenanceRecord> recordsForAircraft(String registration) {
+        AircraftRegistration regVo = new AircraftRegistration(registration);
+        if (!aircraftRepository.existsById(regVo)) {
+            throw new ResourceNotFoundException("Aircraft not found");
         }
-
-        return recordRepository
-                .findByAircraftRegistration(
-                        registration
-                );
+        return recordRepository.findByAircraftRegistration(registration);
     }
 
-    public Double totalHoursForAircraft(
-            String registration
-    ) {
-
-        if (
-                !aircraftRepository.existsById(
-                        registration
-                )
-        ) {
-            throw new ResourceNotFoundException(
-                    "Aircraft not found"
-            );
+    public Double totalHoursForAircraft(String registration) {
+        AircraftRegistration regVo = new AircraftRegistration(registration);
+        if (!aircraftRepository.existsById(regVo)) {
+            throw new ResourceNotFoundException("Aircraft not found");
         }
-
-        return recordRepository
-                .totalMaintenanceHoursByAircraft(
-                        registration
-                );
+        return recordRepository.totalMaintenanceHoursByAircraft(registration);
     }
 
     public Double totalHoursForFleet() {
-
-        return recordRepository
-                .totalMaintenanceHoursForFleet();
+        return recordRepository.totalMaintenanceHoursForFleet();
     }
 
-    public MaintenanceRecord completeRecord(
-            String recordId,
-            String completionNotes
-    ) {
+    public MaintenanceRecord completeRecord(String recordId, String completionNotes) {
+        MaintenanceRecord record = recordRepository.findById(recordId)
+                .orElseThrow(() -> new ResourceNotFoundException("Maintenance record not found"));
 
-        MaintenanceRecord record =
-                recordRepository
-                        .findById(recordId)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Maintenance record not found"
-                                )
-                        );
+        record.complete(completionNotes);
 
-        record.complete(
-                completionNotes
-        );
+        AircraftRegistration registration = new AircraftRegistration(record.getAircraftRegistration());
+        Aircraft aircraft = aircraftRepository.findById(registration)
+                .orElseThrow(() -> new ResourceNotFoundException("Aircraft not found"));
 
-        Aircraft aircraft =
-                aircraftRepository.findByRegistrationNumber(
-                                record.getAircraftRegistration()
-                        )
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Aircraft not found"
-                                )
-                        );
+        aircraft.setStatus("ACTIVE");
+        aircraftRepository.save(aircraft);
 
-        aircraft.setStatus(
-                "ACTIVE"
-        );
-
-        aircraftRepository.save(
-                aircraft
-        );
-
-        return recordRepository.save(
-                record
-        );
+        return recordRepository.save(record);
     }
 }
