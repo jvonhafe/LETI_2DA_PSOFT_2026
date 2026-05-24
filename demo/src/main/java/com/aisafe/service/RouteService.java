@@ -35,7 +35,8 @@ public class RouteService {
         Airport origin = getAirport(originCode);
         Airport destination = getAirport(destinationCode);
 
-        if (origin.getIataCode().equalsIgnoreCase(destination.getIataCode())) {
+        // CORREÇÃO 1: Usar .equals() em vez de .equalsIgnoreCase() porque agora são Value Objects
+        if (origin.getIataCode().equals(destination.getIataCode())) {
             throw new IllegalArgumentException("Origin and destination airports cannot be the same.");
         }
 
@@ -150,7 +151,8 @@ public class RouteService {
     }
 
     private Airport getAirport(String iataCode) {
-        return airportRepository.findById(iataCode.toUpperCase())
+        // CORREÇÃO 2: Embrulhar a String num "new IataCode()" antes de procurar na base de dados
+        return airportRepository.findById(new IataCode(iataCode))
                 .orElseThrow(() -> new ResourceNotFoundException("Airport not found with IATA code: " + iataCode));
     }
 

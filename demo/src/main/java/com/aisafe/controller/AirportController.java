@@ -2,6 +2,7 @@ package com.aisafe.controller;
 
 import com.aisafe.core.exception.ResourceNotFoundException;
 import com.aisafe.model.Airport;
+import com.aisafe.model.IataCode;
 import com.aisafe.repository.AirportRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,79 +18,57 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/airports")
-@Tag(name = "Airports", description = "Gestão de Aeroportos (US106, US107, US108)")
+@Tag(name = "Airports", description = "Gestão de Aeroportos")
 public class AirportController {
 
     @Autowired
     private AirportRepository airportRepository;
 
-    // ==========================================
-    // US106: Registar um novo aeroporto
-    // ==========================================
+    // US106: Registar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Registar Aeroporto", description = "Cria um novo aeroporto no sistema (US106).")
     public Airport createAirport(@RequestBody Airport airport) {
-
         if (airportRepository.existsById(airport.getIataCode())) {
-            throw new IllegalArgumentException("Já existe um aeroporto com o código IATA: " + airport.getIataCode());
+            throw new IllegalArgumentException("Já existe um aeroporto com IATA: " + airport.getIataCode().getCode());
         }
-
         return airportRepository.save(airport);
     }
 
-    // ==========================================
-    // US107: Ver Detalhes de um Aeroporto
-    // ==========================================
+    // US107: Obter por ID
     @GetMapping("/{iata}")
-    @Operation(summary = "Obter Aeroporto", description = "Devolve os detalhes de um aeroporto com links HATEOAS (US107).")
     public EntityModel<Airport> getAirportById(@PathVariable String iata) {
+        IataCode searchId = new IataCode(iata); // <-- Transforma a String no Value Object
 
-        Airport airport = airportRepository.findById(iata.toUpperCase())
-                .orElseThrow(() -> new ResourceNotFoundException("Aeroporto não encontrado com o código IATA: " + iata));
+        Airport airport = airportRepository.findById(searchId)
+                .orElseThrow(() -> new ResourceNotFoundException("Aeroporto não encontrado: " + iata));
 
-        // hateoas
         return EntityModel.of(airport,
-                linkTo(methodOn(AirportController.class).getAirportById(airport.getIataCode())).withSelfRel(),
+                linkTo(methodOn(AirportController.class).getAirportById(airport.getIataCode().getCode())).withSelfRel(),
                 linkTo(methodOn(AirportController.class).getAllAirports()).withRel("todos-aeroportos")
         );
     }
 
-    // ==========================================
-    // US107: Ver todos os Aeroportos
-    // ==========================================
+    // US107: Listar todos
     @GetMapping
-    @Operation(summary = "Listar Aeroportos", description = "Devolve a lista simples de todos os aeroportos (US107).")
     public List<Airport> getAllAirports() {
         return airportRepository.findAll();
     }
 
-    // ==========================================
-    // US108: Pesquisar por Cidade (LISTA LIMPA)
-    // ==========================================
+    // US108: Pesquisar por cidade
     @GetMapping("/search")
-    @Operation(summary = "Pesquisar Aeroportos", description = "Pesquisa aeroportos filtrando pelo nome da cidade (US108).")
     public List<Airport> searchAirports(@RequestParam String city) {
         return airportRepository.findByCityContainingIgnoreCase(city);
     }
 
-    // ==========================================
-    // US109: Atualizar Estado do Aeroporto
-    // ==========================================
+    // US109: Atualizar Estado
     @PatchMapping("/{iata}/status")
-    @Operation(summary = "Atualizar Estado", description = "Atualiza o estado operacional de um aeroporto (US109).")
     public Airport updateAirportStatus(@PathVariable String iata, @RequestParam String status) {
+        IataCode searchId = new IataCode(iata); // <-- Transforma a String no Value Object
 
-        String statusUpper = status.toUpperCase();
+        Airport airport = airportRepository.findById(searchId)
+                .orElseThrow(() -> new ResourceNotFoundException("Aeroporto não encontrado: " + iata));
 
-        if (!statusUpper.matches("^(OPERATIONAL|CLOSED|UNDER_MAINTENANCE)$")) {
-            throw new IllegalArgumentException("Estado inválido. Escolha entre: OPERATIONAL, CLOSED ou UNDER_MAINTENANCE");
-        }
-
-        Airport airport = airportRepository.findById(iata.toUpperCase())
-                .orElseThrow(() -> new ResourceNotFoundException("Aeroporto não encontrado com o código IATA: " + iata));
-
-        airport.setStatus(statusUpper);
+        airport.updateStatus(status); // <-- Usa o método seguro da tua Entidade!
         return airportRepository.save(airport);
     }
 }
