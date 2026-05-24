@@ -2,7 +2,7 @@
 autonumber
 skinparam packageStyle rectangle
 
-actor "User" as User
+actor "ATCC" as User
 participant "System" as Sys
 
 User -> Sys : Pesquisa aeroportos inserindo o nome da cidade

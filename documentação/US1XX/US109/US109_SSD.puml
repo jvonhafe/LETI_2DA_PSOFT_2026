@@ -2,7 +2,7 @@
 autonumber
 skinparam packageStyle rectangle
 
-actor "Admin" as User
+actor "Backoffice Operator" as User
 participant "System" as Sys
 
 User -> Sys : Atualiza o estado de um aeroporto

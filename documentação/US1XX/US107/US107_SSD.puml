@@ -2,7 +2,7 @@
 autonumber
 skinparam packageStyle rectangle
 
-actor "User" as User
+actor "ATCC" as User
 participant "System" as Sys
 
 User -> Sys : Solicita os detalhes de um aeroporto ou a lista total

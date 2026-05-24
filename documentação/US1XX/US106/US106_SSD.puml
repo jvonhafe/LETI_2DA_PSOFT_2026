@@ -2,7 +2,7 @@
 autonumber
 skinparam packageStyle rectangle
 
-actor "Admin" as User
+actor "Backofficer Operator" as User
 participant "System" as Sys
 
 User -> Sys : Inicia o registo de um novo aeroporto (envia dados)

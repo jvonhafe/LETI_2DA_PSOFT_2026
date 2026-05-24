@@ -2,7 +2,7 @@
 autonumber
 skinparam packageStyle rectangle
 
-actor "Admin" as User
+actor "Backoffice Operator" as User
 participant "AirportController" as Ctrl
 participant "Airport" as Model
 participant "AirportRepository" as Repo

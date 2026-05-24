@@ -2,7 +2,7 @@
 autonumber
 skinparam packageStyle rectangle
 
-actor "User" as User
+actor "ATCC" as User
 participant "AirportController" as Ctrl
 participant "AirportRepository" as Repo
 database "Base de Dados" as DB
