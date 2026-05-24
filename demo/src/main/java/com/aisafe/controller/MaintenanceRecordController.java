@@ -1,5 +1,7 @@
 package com.aisafe.controller;
 
+import com.aisafe.application.CloseMaintenanceRecordUseCase;
+import com.aisafe.application.ScheduleMaintenanceUseCase;
 import com.aisafe.model.MaintenanceRecord;
 import com.aisafe.service.MaintenanceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,16 +23,24 @@ import java.util.Map;
 public class MaintenanceRecordController {
 
     private final MaintenanceService maintenanceService;
+    private final ScheduleMaintenanceUseCase scheduleMaintenanceUseCase;
+    private final CloseMaintenanceRecordUseCase closeMaintenanceRecordUseCase;
 
-    public MaintenanceRecordController(MaintenanceService maintenanceService) {
+    public MaintenanceRecordController(
+            MaintenanceService maintenanceService,
+            ScheduleMaintenanceUseCase scheduleMaintenanceUseCase,
+            CloseMaintenanceRecordUseCase closeMaintenanceRecordUseCase
+    ) {
         this.maintenanceService = maintenanceService;
+        this.scheduleMaintenanceUseCase = scheduleMaintenanceUseCase;
+        this.closeMaintenanceRecordUseCase = closeMaintenanceRecordUseCase;
     }
 
     @Operation(summary = "Criar Registo de Manutenção")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MaintenanceRecord createRecord(@Valid @RequestBody MaintenanceRecord record) {
-        return maintenanceService.createRecord(record);
+        return scheduleMaintenanceUseCase.execute(record);
     }
 
     @Operation(summary = "Listar Registos de Manutenção por Aeronave")
@@ -63,7 +73,7 @@ public class MaintenanceRecordController {
             @PathVariable String recordId,
             @Valid @RequestBody CompleteMaintenanceRequest request
     ) {
-        return maintenanceService.completeRecord(
+        return closeMaintenanceRecordUseCase.execute(
                 recordId,
                 request.getCompletionNotes()
         );

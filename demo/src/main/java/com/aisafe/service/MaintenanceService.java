@@ -39,8 +39,7 @@ public class MaintenanceService {
     ) {
 
         Aircraft aircraft =
-                aircraftRepository
-                        .findById(
+                aircraftRepository.findByRegistrationNumber(
                                 record.getAircraftRegistration()
                         )
                         .orElseThrow(() ->
@@ -148,8 +147,7 @@ public class MaintenanceService {
         );
 
         Aircraft aircraft =
-                aircraftRepository
-                        .findById(
+                aircraftRepository.findByRegistrationNumber(
                                 record.getAircraftRegistration()
                         )
                         .orElseThrow(() ->

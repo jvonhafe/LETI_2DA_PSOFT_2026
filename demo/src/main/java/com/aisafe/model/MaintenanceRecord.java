@@ -1,9 +1,11 @@
 package com.aisafe.model;
 
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -18,6 +20,7 @@ import java.util.UUID;
 @Entity
 @Data
 public class MaintenanceRecord {
+
     @Id
     private String recordId = UUID.randomUUID().toString();
 
@@ -33,6 +36,10 @@ public class MaintenanceRecord {
     @FutureOrPresent(message = "A data de início não pode estar no passado.")
     private LocalDateTime startDate;
 
+    @Embedded
+    @Valid
+    private MaintenancePeriod maintenancePeriod;
+
     @Positive(message = "A duração esperada deve ser positiva.")
     private double expectedDurationHours;
 
@@ -41,8 +48,11 @@ public class MaintenanceRecord {
     private List<String> checklist = new ArrayList<>();
 
     private String maintenanceComponent = "GENERAL";
+
     private String status = "IN_PROGRESS";
+
     private LocalDateTime completionDate;
+
     private String completionNotes;
 
     @Version
@@ -52,9 +62,11 @@ public class MaintenanceRecord {
         if ("COMPLETED".equalsIgnoreCase(this.status)) {
             throw new IllegalStateException("Este registo de manutenção já está concluído.");
         }
+
         if (notes == null || notes.isBlank()) {
             throw new IllegalArgumentException("As notas de conclusão são obrigatórias.");
         }
+
         this.status = "COMPLETED";
         this.completionDate = LocalDateTime.now();
         this.completionNotes = notes;
