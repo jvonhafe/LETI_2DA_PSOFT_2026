@@ -1,7 +1,7 @@
 package com.aisafe.controller;
 
-import com.aisafe.application.CloseMaintenanceRecordUseCase;
-import com.aisafe.application.ScheduleMaintenanceUseCase;
+import com.aisafe.application.maintence.CloseMaintenanceRecordUseCase;
+import com.aisafe.application.maintence.ScheduleMaintenanceUseCase;
 import com.aisafe.model.MaintenanceRecord;
 import com.aisafe.service.MaintenanceService;
 import io.swagger.v3.oas.annotations.Operation;

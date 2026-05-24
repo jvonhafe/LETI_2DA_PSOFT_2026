@@ -10,7 +10,7 @@ public class IataCode implements Serializable {
     private String code;
 
     protected IataCode() {
-        // Obrigatório para o JPA
+
     }
 
     public IataCode(String code) {

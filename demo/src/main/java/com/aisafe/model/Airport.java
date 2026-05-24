@@ -26,10 +26,9 @@ public class Airport {
         this.city = city;
         this.country = country;
         this.timezone = timezone;
-        this.updateStatus(status); // Valida logo na criação
+        this.updateStatus(status);
     }
 
-    // Regra de Negócio protegida dentro da Entidade
     public void updateStatus(String newStatus) {
         if (newStatus == null) {
             throw new IllegalArgumentException("O estado do aeroporto não pode ser nulo.");

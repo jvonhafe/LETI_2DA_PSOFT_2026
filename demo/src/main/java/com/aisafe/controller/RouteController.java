@@ -1,8 +1,8 @@
 package com.aisafe.controller;
 
+import com.aisafe.application.route.*;
 import com.aisafe.model.Route;
 import com.aisafe.model.RouteHistory;
-import com.aisafe.usecase.route.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

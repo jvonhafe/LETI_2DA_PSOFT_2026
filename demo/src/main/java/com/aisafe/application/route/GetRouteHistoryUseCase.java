@@ -1,4 +1,4 @@
-package com.aisafe.usecase.route;
+package com.aisafe.application.route;
 
 import com.aisafe.model.RouteHistory;
 import com.aisafe.repository.RouteHistoryRepository;

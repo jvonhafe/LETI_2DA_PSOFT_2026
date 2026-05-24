@@ -2,7 +2,7 @@
 skinparam packageStyle rectangle
 skinparam hide empty members
 
-package "Airport Aggregate (US106, US107, US108, US109)" {
+
 
     class Airport <<aggregate root>> {
         - name : String
@@ -55,5 +55,5 @@ package "Airport Aggregate (US106, US107, US108, US109)" {
 
     ' Relação externa para outro agregado
     AircraftCertification "1" --> "1" AircraftModelId : appliesToModel
-}
+
 @enduml

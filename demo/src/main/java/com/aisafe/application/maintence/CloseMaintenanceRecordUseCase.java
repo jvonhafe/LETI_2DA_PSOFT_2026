@@ -1,4 +1,4 @@
-package com.aisafe.application;
+package com.aisafe.application.maintence;
 
 import com.aisafe.model.MaintenanceRecord;
 import com.aisafe.service.MaintenanceService;

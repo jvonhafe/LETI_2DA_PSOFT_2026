@@ -1,4 +1,4 @@
-package com.aisafe.application;
+package com.aisafe.application.aircraft;
 
 import com.aisafe.model.AircraftModel;
 import com.aisafe.model.Capacity;

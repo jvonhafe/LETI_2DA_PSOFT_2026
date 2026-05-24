@@ -1,4 +1,4 @@
-package com.aisafe.usecase.route;
+package com.aisafe.application.route;
 
 import com.aisafe.core.exception.ResourceNotFoundException;
 import com.aisafe.model.Airport;

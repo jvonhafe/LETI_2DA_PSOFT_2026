@@ -1,6 +1,6 @@
 package com.aisafe.controller;
 
-import com.aisafe.application.RegisterAircraftModelUseCase;
+import com.aisafe.application.aircraft.RegisterAircraftModelUseCase;
 import com.aisafe.model.AircraftModel;
 import com.aisafe.repository.AircraftModelRepository;
 import org.springframework.web.bind.annotation.*;

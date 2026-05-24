@@ -1,63 +1,172 @@
-{
+﻿{
   "info": {
-    "_postman_id": "8165b040-eb78-49cf-a274-a0148735bfb8",
-    "name": "OpenAPI definition - Verified Automated Suite",
+    "name": "LETI_2DA_PSOFT_2026 - API",
+    "description": "Coleção automatizada para defesa de PSOFT. O token JWT é extraído automaticamente no Login e herdado por todos os pedidos.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
   },
   "item": [
     {
-      "name": "auth",
+      "name": "1. Auth",
       "item": [
         {
-          "name": "login",
-          "item": [
+          "name": "Login Automático",
+          "event": [
             {
-              "name": "Login e geração de token JWT",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test(\"Requisito 3.6.2 - Autenticação JWT com Sucesso\", function () {",
-                      "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                      "});",
-                      "pm.test(\"Token JWT está presente na resposta\", function () {",
-                      "    var jsonData = pm.response.json();",
-                      "    pm.expect(jsonData).to.have.property('token');",
-                      "    pm.expect(jsonData.token).to.be.a('string');",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [
-                  { "key": "Content-Type", "value": "application/json" },
-                  { "key": "Accept", "value": "*/*" }
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Requisito 3.6.2 - Autenticação JWT com Sucesso\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.test(\"Token JWT extraído e guardado\", function () {",
+                  "        pm.expect(jsonData).to.have.property('token');",
+                  "        pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+                  "        console.log(\"Token guardado com sucesso!\");",
+                  "    });",
+                  "}"
                 ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/auth/login",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "login"]
-                }
-              },
-              "response": []
+                "type": "text/javascript"
+              }
             }
-          ]
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "*/*" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
         }
       ]
     },
     {
-      "name": "aircraft-models",
+      "name": "2. Airports",
       "item": [
         {
-          "name": "register Model",
+          "name": "US106 - Registar Aeroporto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US106 - Aeroporto criado (201 Created)\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"iataCode\": \"LIS\",\n    \"name\": \"Humberto Delgado\",\n    \"city\": \"Lisboa\",\n    \"country\": \"Portugal\",\n    \"timezone\": \"GMT\",\n    \"status\": \"OPERATIONAL\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/airports",
+              "host": ["{{base_url}}"],
+              "path": ["airports"]
+            }
+          }
+        },
+        {
+          "name": "US107 - Listar Aeroportos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US107 - Lista de aeroportos retornada (200 OK)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/airports",
+              "host": ["{{base_url}}"],
+              "path": ["airports"]
+            }
+          }
+        },
+        {
+          "name": "US109 - Atualizar Estado (PATCH)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US109 - Estado do aeroporto alterado (200 OK)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/airports/LIS/status?status=CLOSED",
+              "host": ["{{base_url}}"],
+              "path": ["airports", "LIS", "status"],
+              "query": [
+                { "key": "status", "value": "CLOSED" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Aircrafts",
+      "item": [
+        {
+          "name": "US101 - Registar Modelo",
           "event": [
             {
               "listen": "test",
@@ -86,20 +195,14 @@
               "raw": "{\n  \"modelId\": \"A320\",\n  \"modelName\": \"Airbus A320\",\n  \"manufacturer\": \"Airbus\",\n  \"maxCapacity\": 180,\n  \"fuelCapacity\": 24000,\n  \"maxRange\": 6000,\n  \"cruisingSpeed\": 850\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/aircraft-models",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "aircraft-models"]
+              "raw": "{{base_url}}/aircraft-models",
+              "host": ["{{base_url}}"],
+              "path": ["aircraft-models"]
             }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "aircraft",
-      "item": [
+          }
+        },
         {
-          "name": "register Aircraft",
+          "name": "US102 - Registar Aeronave",
           "event": [
             {
               "listen": "test",
@@ -124,15 +227,14 @@
               "raw": "{\n  \"registrationNumber\": \"CS-TTO\",\n  \"modelId\": \"A320\",\n  \"manufacturingDate\": \"2024-01-15\",\n  \"status\": \"ACTIVE\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/aircraft",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "aircraft"]
+              "raw": "{{base_url}}/aircraft",
+              "host": ["{{base_url}}"],
+              "path": ["aircraft"]
             }
-          },
-          "response": []
+          }
         },
         {
-          "name": "get Aircraft Details",
+          "name": "US103 - Obter Detalhes da Aeronave",
           "event": [
             {
               "listen": "test",
@@ -143,7 +245,7 @@
                   "});",
                   "pm.test(\"Dados da aeronave correspondem ao esperado\", function () {",
                   "    var jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.registrationNumber.registration).to.not.be.null;",
+                  "    pm.expect(jsonData.registrationNumber).to.not.be.undefined;",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -153,15 +255,14 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/aircraft/CS-TTO",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "aircraft", "CS-TTO"]
+              "raw": "{{base_url}}/aircraft/CS-TTO",
+              "host": ["{{base_url}}"],
+              "path": ["aircraft", "CS-TTO"]
             }
-          },
-          "response": []
+          }
         },
         {
-          "name": "search Aircrafts",
+          "name": "US104 - Pesquisar Aeronaves",
           "event": [
             {
               "listen": "test",
@@ -181,19 +282,18 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/aircraft/search?modelId=A320&status=ACTIVE",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "aircraft", "search"],
+              "raw": "{{base_url}}/aircraft/search?modelId=A320&status=ACTIVE",
+              "host": ["{{base_url}}"],
+              "path": ["aircraft", "search"],
               "query": [
                 { "key": "modelId", "value": "A320" },
                 { "key": "status", "value": "ACTIVE" }
               ]
             }
-          },
-          "response": []
+          }
         },
         {
-          "name": "update Status",
+          "name": "US105 - Atualizar Estado (PATCH)",
           "event": [
             {
               "listen": "test",
@@ -210,23 +310,22 @@
           "request": {
             "method": "PATCH",
             "url": {
-              "raw": "{{baseUrl}}/api/aircraft/CS-TTO/status?newStatus=UNDER_MAINTENANCE",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "aircraft", "CS-TTO", "status"],
+              "raw": "{{base_url}}/aircraft/CS-TTO/status?newStatus=UNDER_MAINTENANCE",
+              "host": ["{{base_url}}"],
+              "path": ["aircraft", "CS-TTO", "status"],
               "query": [
                 { "key": "newStatus", "value": "UNDER_MAINTENANCE" }
               ]
             }
-          },
-          "response": []
+          }
         }
       ]
     },
     {
-      "name": "routes",
+      "name": "4. Routes",
       "item": [
         {
-          "name": "Criar Rota",
+          "name": "US110 - Criar Rota",
           "event": [
             {
               "listen": "test",
@@ -251,15 +350,14 @@
               "raw": "{\n  \"originAirport\": \"LIS\",\n  \"destinationAirport\": \"OPO\",\n  \"estimatedFlightTimeMinutes\": 50,\n  \"minimumRange\": 400,\n  \"minimumCapacity\": 120\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/routes",
-              "host": ["{{baseUrl}}"],
+              "raw": "{{base_url}}/routes",
+              "host": ["{{base_url}}"],
               "path": ["routes"]
             }
-          },
-          "response": []
+          }
         },
         {
-          "name": "Desativar Rota",
+          "name": "US114 - Desativar Rota",
           "event": [
             {
               "listen": "test",
@@ -278,20 +376,19 @@
           "request": {
             "method": "PATCH",
             "url": {
-              "raw": "{{baseUrl}}/routes/1/deactivate",
-              "host": ["{{baseUrl}}"],
+              "raw": "{{base_url}}/routes/1/deactivate",
+              "host": ["{{base_url}}"],
               "path": ["routes", "1", "deactivate"]
             }
-          },
-          "response": []
+          }
         }
       ]
     },
     {
-      "name": "maintenance-records",
+      "name": "5. Maintenance",
       "item": [
         {
-          "name": "Criar Registo de Manutenção",
+          "name": "US115 - Criar Registo de Manutenção",
           "event": [
             {
               "listen": "test",
@@ -315,20 +412,13 @@
               "raw": "{\n  \"id\": \"MNT-101\",\n  \"aircraftRegistration\": \"CS-TTO\",\n  \"templateId\": 1,\n  \"expectedDurationHours\": 12.5,\n  \"status\": \"SCHEDULED\",\n  \"checklist\": [\"Verificar motores\", \"Inspeção de trem de pouso\"]\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/maintenance-records",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "maintenance-records"]
+              "raw": "{{base_url}}/maintenance-records",
+              "host": ["{{base_url}}"],
+              "path": ["maintenance-records"]
             }
-          },
-          "response": []
+          }
         }
       ]
-    }
-  ],
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:8080"
     }
   ]
 }

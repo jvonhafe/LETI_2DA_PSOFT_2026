@@ -1,6 +1,6 @@
 package com.aisafe.controller;
 
-import com.aisafe.application.RegisterAircraftUseCase;
+import com.aisafe.application.aircraft.RegisterAircraftUseCase;
 import com.aisafe.core.exception.AircraftNotFoundException;
 import com.aisafe.model.Aircraft;
 import com.aisafe.model.AircraftRegistration;

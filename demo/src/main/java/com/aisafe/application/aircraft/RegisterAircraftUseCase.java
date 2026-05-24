@@ -1,4 +1,4 @@
-package com.aisafe.application;
+package com.aisafe.application.aircraft;
 
 import com.aisafe.core.exception.DuplicateAircraftRegistrationException;
 import com.aisafe.core.exception.ResourceNotFoundException;

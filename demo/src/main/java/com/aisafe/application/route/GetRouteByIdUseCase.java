@@ -1,4 +1,4 @@
-package com.aisafe.usecase.route;
+package com.aisafe.application.route;
 
 import com.aisafe.model.Route;
 import org.springframework.stereotype.Service;
