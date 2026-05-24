@@ -1,37 +1,36 @@
 package com.aisafe.controller;
 
+import com.aisafe.application.RegisterAircraftUseCase;
+import com.aisafe.core.exception.AircraftNotFoundException;
 import com.aisafe.model.Aircraft;
+import com.aisafe.model.AircraftRegistration;
 import com.aisafe.repository.AircraftRepository;
-import com.aisafe.repository.AircraftModelRepository;
-import com.aisafe.core.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/aircraft")
 public class AircraftController {
 
-    @Autowired
-    private AircraftRepository aircraftRepository;
+    private final RegisterAircraftUseCase registerUseCase;
+    private final AircraftRepository aircraftRepository;
 
-    @Autowired
-    private AircraftModelRepository aircraftModelRepository;
+    public AircraftController(RegisterAircraftUseCase registerUseCase, AircraftRepository aircraftRepository) {
+        this.registerUseCase = registerUseCase;
+        this.aircraftRepository = aircraftRepository;
+    }
 
     @PostMapping
-    public Aircraft registerAircraft(@Valid @RequestBody Aircraft aircraft) {
-        if (!aircraftModelRepository.existsById(aircraft.getModelId())) {
-            throw new ResourceNotFoundException("Não é possível registar a aeronave. O modelo '" + aircraft.getModelId() + "' não existe.");
-        }
-        return aircraftRepository.save(aircraft);
+    public Aircraft registerAircraft(@RequestBody AircraftDTO dto) {
+        return registerUseCase.execute(dto.registrationNumber, dto.modelId, dto.manufacturingDate, dto.status);
     }
 
     @GetMapping("/{registration}")
     public Aircraft getAircraftDetails(@PathVariable String registration) {
-        return aircraftRepository.findById(registration)
-                .orElseThrow(() -> new ResourceNotFoundException("Aeronave com a matrícula " + registration + " não encontrada."));
+        return aircraftRepository.findById(new AircraftRegistration(registration))
+                .orElseThrow(() -> new AircraftNotFoundException(registration)); // Exceção customizada aqui!
     }
 
     @GetMapping("/search")
@@ -41,18 +40,19 @@ public class AircraftController {
         return aircraftRepository.searchAircrafts(modelId, status, year);
     }
 
-    @PatchMapping("/{registration}/status")
+    @Valid @PatchMapping("/{registration}/status")
     public Aircraft updateStatus(@PathVariable String registration, @RequestParam String newStatus) {
-        String statusUpper = newStatus.toUpperCase();
+        Aircraft aircraft = aircraftRepository.findById(new AircraftRegistration(registration))
+                .orElseThrow(() -> new AircraftNotFoundException(registration));
 
-        if (!statusUpper.matches("^(ACTIVE|INACTIVE|UNDER_MAINTENANCE)$")) {
-            throw new IllegalArgumentException("Estado inválido. Escolha entre: ACTIVE, INACTIVE ou UNDER_MAINTENANCE");
-        }
-
-        Aircraft aircraft = aircraftRepository.findById(registration)
-                .orElseThrow(() -> new ResourceNotFoundException("Aeronave com a matrícula " + registration + " não encontrada."));
-
-        aircraft.setStatus(statusUpper);
+        aircraft.setStatus(newStatus.toUpperCase());
         return aircraftRepository.save(aircraft);
+    }
+
+    public static class AircraftDTO {
+        public String registrationNumber;
+        public String modelId;
+        public LocalDate manufacturingDate;
+        public String status;
     }
 }
