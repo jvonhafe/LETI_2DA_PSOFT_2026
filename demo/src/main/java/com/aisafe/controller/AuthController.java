@@ -1,9 +1,13 @@
 package com.aisafe.controller;
 
 import com.aisafe.core.security.JwtService;
+import com.aisafe.model.User;
+import com.aisafe.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -11,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final JwtService jwtService;
+    private final UserRepository userRepository;
 
-    public AuthController(JwtService jwtService) {
+    public AuthController(JwtService jwtService, UserRepository userRepository) {
         this.jwtService = jwtService;
+        this.userRepository = userRepository;
     }
 
     @Operation(summary = "Login e geração de token JWT")
@@ -23,21 +29,17 @@ public class AuthController {
         if (request == null || request.username == null || request.password == null) {
             return new LoginResponse("Invalid credentials");
         }
+        Optional<User> userOptional = userRepository.findByUsername(request.username);
 
-        if (!isValidUser(request.username, request.password)) {
+        if (userOptional.isEmpty() || !userOptional.get().getPassword().equals(request.password)) {
             return new LoginResponse("Invalid credentials");
         }
 
-        String token = jwtService.generateToken(request.username);
-        return new LoginResponse(token);
-    }
+        User user = userOptional.get();
 
-    private boolean isValidUser(String username, String password) {
-        return (username.equals("admin") && password.equals("admin123"))
-                || (username.equals("backoffice") && password.equals("backoffice123"))
-                || (username.equals("atcc") && password.equals("atcc123"))
-                || (username.equals("tech") && password.equals("tech123"))
-                || (username.equals("supervisor") && password.equals("supervisor123"));
+        String token = jwtService.generateToken(user);
+
+        return new LoginResponse(token);
     }
 
     public static class LoginRequest {
