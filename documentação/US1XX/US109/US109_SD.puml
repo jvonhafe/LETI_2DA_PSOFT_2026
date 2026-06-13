@@ -1,42 +1,56 @@
 @startuml
 autonumber
-skinparam packageStyle rectangle
+skinparam maxMessageSize 150
 
-actor "Backoffice Operator" as User
+actor "ATCC/Backoffice" as Admin
 participant "AirportController" as Ctrl
-participant "Airport" as Model
+participant "UpdateAirportStatusUseCase" as UC
+participant "IataCode" as IATA <<Value Object>>
 participant "AirportRepository" as Repo
+participant "Airport" as Entity <<Aggregate Root>>
 database "Base de Dados" as DB
 
-User -> Ctrl : PATCH /api/airports/{iata}/status?status={newStatus}
+Admin -> Ctrl : PATCH /api/airports/
 activate Ctrl
 
-note right of Ctrl: Valida se o status obedecem (OPERATIONAL, CLOSED, etc.)
-Ctrl -> Ctrl : statusUpper.matches(...)
+Ctrl -> UC : execute(iata, newStatus)
+activate UC
 
-Ctrl -> Repo : findById(iata.toUpperCase())
+note right of UC: O Use Case orquestra o fluxo\ne valida o formato do IATA no Domínio
+UC -> IATA ** : create(iata)
+activate IATA
+IATA --> UC : iataCode
+deactivate IATA
+
+UC -> Repo : findById(iataCode)
 activate Repo
-Repo -> DB : SELECT * FROM airport
+Repo -> DB : SELECT * FROM airport WHERE iata_code = ?
 activate DB
 DB --> Repo : Airport Record
 deactivate DB
-Repo --> Ctrl : Optional<Airport>
+Repo --> UC : Optional<Airport>
 deactivate Repo
 
-Ctrl -> Model : setStatus(statusUpper)
-activate Model
-Model --> Ctrl :
-deactivate Model
+note right of UC: O Use Case pede à Entidade\npara executar a lógica de negócio
+UC -> Entity : updateStatus(newStatus)
+activate Entity
+Entity -> Entity : validateStatusTransition()
+Entity --> UC :
+deactivate Entity
 
-Ctrl -> Repo : save(airport)
+UC -> Repo : save(airport)
 activate Repo
 Repo -> DB : UPDATE airport SET status = ?
 activate DB
 DB --> Repo : success
 deactivate DB
-Repo --> Ctrl : updatedAirport
+Repo --> UC : updatedAirport
 deactivate Repo
 
-Ctrl --> User : OK (updatedAirport)
+UC --> Ctrl : updatedAirport
+deactivate UC
+
+Ctrl --> Admin : 200 OK (updatedAirport)
 deactivate Ctrl
+
 @enduml
