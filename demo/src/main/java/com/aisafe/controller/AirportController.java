@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
+// NOVO IMPORT PARA A SEGURANÇA:
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,11 +30,11 @@ public class AirportController {
     @Autowired
     private UpdateAirportStatusUseCase updateAirportStatusUseCase;
 
-
     @Autowired
     private AirportRepository airportRepository;
 
     // US106: Registar
+    @PreAuthorize("hasAnyRole('ADMIN', 'BACKOFFICE')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Airport createAirport(@RequestBody Airport airport) {
@@ -40,6 +42,7 @@ public class AirportController {
     }
 
     // US107: Obter por ID
+    @PreAuthorize("hasAnyRole('ADMIN', 'BACKOFFICE', 'ATCC')")
     @GetMapping("/{iata}")
     public EntityModel<Airport> getAirportById(@PathVariable String iata) {
         IataCode searchId = new IataCode(iata);
@@ -54,18 +57,21 @@ public class AirportController {
     }
 
     // US107: Listar todos
+    @PreAuthorize("hasAnyRole('ADMIN', 'BACKOFFICE', 'ATCC')")
     @GetMapping
     public List<Airport> getAllAirports() {
         return airportRepository.findAll();
     }
 
     // US108: Pesquisar por cidade
+    @PreAuthorize("hasAnyRole('ADMIN', 'BACKOFFICE', 'ATCC')")
     @GetMapping("/search")
     public List<Airport> searchAirports(@RequestParam String city) {
         return airportRepository.findByCityContainingIgnoreCase(city);
     }
 
-    // US109: Atualizar Estado (Lógica movida para o UpdateAirportStatusUseCase)
+    // US109: Atualizar Estado
+    @PreAuthorize("hasAnyRole('ADMIN', 'BACKOFFICE')")
     @PatchMapping("/{iata}/status")
     public Airport updateAirportStatus(@PathVariable String iata, @RequestParam String status) {
         return updateAirportStatusUseCase.execute(iata, status);

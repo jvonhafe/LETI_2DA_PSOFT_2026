@@ -1,5 +1,6 @@
 package com.aisafe.core.security;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
@@ -13,10 +14,16 @@ public class JwtService {
     private static final String SECRET = "aisafe-secret-key-2026";
     private static final long EXPIRATION = 1000 * 60 * 60 * 24;
 
-    public String generateToken(String username) {
+    // NOVO: Agora recebe UserDetails (que tem o utilizador e a permissão dele)
+    public String generateToken(UserDetails userDetails) {
         long expirationTime = System.currentTimeMillis() + EXPIRATION;
+        String username = userDetails.getUsername();
 
-        String payload = username + ":" + expirationTime;
+        // NOVO: Vai buscar a permissão do utilizador (ex: ROLE_ATCC)
+        String role = userDetails.getAuthorities().iterator().next().getAuthority();
+
+        // NOVO: O payload agora tem 3 partes! username:role:expiration
+        String payload = username + ":" + role + ":" + expirationTime;
         String signature = sign(payload);
 
         return Base64.getEncoder().encodeToString((payload + ":" + signature).getBytes(StandardCharsets.UTF_8));
@@ -27,16 +34,25 @@ public class JwtService {
         return decoded.split(":")[0];
     }
 
+    // NOVO: Método novo para o Filtro conseguir extrair a permissão do Token!
+    public String extractRole(String token) {
+        String decoded = decode(token);
+        return decoded.split(":")[1];
+    }
+
     public boolean isTokenValid(String token) {
         try {
             String decoded = decode(token);
             String[] parts = decoded.split(":");
 
+            // NOVO: Como adicionámos a role, o array agora tem 4 partes
             String username = parts[0];
-            long expiration = Long.parseLong(parts[1]);
-            String signature = parts[2];
+            String role = parts[1];
+            long expiration = Long.parseLong(parts[2]);
+            String signature = parts[3];
 
-            String expectedSignature = sign(username + ":" + expiration);
+            // NOVO: Validar a assinatura contando com a role pelo meio
+            String expectedSignature = sign(username + ":" + role + ":" + expiration);
 
             return signature.equals(expectedSignature) && expiration > System.currentTimeMillis();
 
