@@ -1,6 +1,5 @@
 @startuml
 autonumber
-skinparam maxMessageSize 150
 
 actor "Backoffice Operator" as Admin
 participant "AISafe System" as System

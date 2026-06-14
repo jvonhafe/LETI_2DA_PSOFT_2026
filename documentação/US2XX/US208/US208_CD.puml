@@ -2,8 +2,6 @@
 skinparam classAttributeIconSize 0
 skinparam packageStyle rectangle
 
-package "US208 - Atualizar Detalhes do Aeroporto" {
-
     class AirportController <<RestController>> {
       + updateAirportDetails(iata: String, request: UpdateDetailsRequest): ResponseEntity
     }
@@ -46,5 +44,5 @@ package "US208 - Atualizar Detalhes do Aeroporto" {
     Airport "1" *-- "1" IataCode : identified by >
     Airport "1" *-- "0..1" ContactInfo : contains >
     Airport "1" *-- "0..1" OperatingHours : operates during >
-}
+
 @enduml

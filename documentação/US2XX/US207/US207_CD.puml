@@ -2,7 +2,6 @@
 skinparam classAttributeIconSize 0
 skinparam packageStyle rectangle
 
-package "US207 - Registar Aeroporto Detalhado" {
 
     class AirportController <<RestController>> {
       + registerDetailedAirport(request: DetailedAirportDto): ResponseEntity
@@ -47,5 +46,4 @@ package "US207 - Registar Aeroporto Detalhado" {
     Airport "1" *-- "1" IataCode : identified by >
     Airport "1" *-- "0..*" Facility : has >
     Airport "1" *-- "0..*" MediaImage : depicted by >
-}
 @enduml

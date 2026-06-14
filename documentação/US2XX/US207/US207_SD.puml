@@ -1,6 +1,6 @@
 @startuml
 autonumber
-skinparam maxMessageSize 150
+
 
 actor "Backoffice Operator" as Admin
 participant "AirportController" as Ctrl
