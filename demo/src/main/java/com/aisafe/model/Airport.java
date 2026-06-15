@@ -1,8 +1,8 @@
 package com.aisafe.model;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "airports")
@@ -16,6 +16,22 @@ public class Airport {
     private String country;
     private String timezone;
     private String status;
+
+    // --- NOVO: US208 (Value Objects Embutidos para Contactos e Horários) ---
+    @Embedded
+    private ContactInfo contactInfo;
+
+    @Embedded
+    private OperatingHours operatingHours;
+
+    // --- NOVO: US207 (Entidades Locais em Cascata para Fotos e Instalações) ---
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "airport_iata") // Cria a chave estrangeira automaticamente na tabela 'facility'
+    private List<Facility> facilities = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "airport_iata") // Cria a chave estrangeira automaticamente na tabela 'media_image'
+    private List<MediaImage> images = new ArrayList<>();
 
     protected Airport() {}
 
@@ -40,11 +56,35 @@ public class Airport {
         this.status = statusUpper;
     }
 
-    // Getters
+    // --- NOVO: Métodos de Domínio (Para orquestrar a US207 e US208 com segurança) ---
+    public void updateContactInfo(ContactInfo contactInfo) {
+        this.contactInfo = contactInfo;
+    }
+
+    public void updateOperatingHours(OperatingHours operatingHours) {
+        this.operatingHours = operatingHours;
+    }
+
+    public void addFacility(Facility facility) {
+        this.facilities.add(facility);
+    }
+
+    public void addImage(MediaImage image) {
+        this.images.add(image);
+    }
+
+    // --- Getters Originais ---
     public IataCode getIataCode() { return iataCode; }
     public String getName() { return name; }
     public String getCity() { return city; }
     public String getCountry() { return country; }
     public String getTimezone() { return timezone; }
     public String getStatus() { return status; }
+
+    // --- Novos Getters (Necessários para devolver o JSON completo) ---
+    public ContactInfo getContactInfo() { return contactInfo; }
+    public OperatingHours getOperatingHours() { return operatingHours; }
+    public List<Facility> getFacilities() { return facilities; }
+    public List<MediaImage> getImages() { return images; }
+
 }
