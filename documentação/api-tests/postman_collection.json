@@ -1,6 +1,10 @@
 ﻿{
   "info": {
+<<<<<<< HEAD
     "name": "LETI_2DA_PSOFT_2026 - API (Completa)",
+=======
+    "name": "LETI_2DA_PSOFT_2026 - API",
+>>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
     "description": "Coleção automatizada para defesa de PSOFT. O token JWT é extraído automaticamente no Login e herdado por todos os pedidos.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -31,6 +35,7 @@
       "name": "1. Auth",
       "item": [
         {
+<<<<<<< HEAD
           "name": "Login Automático (Admin/Backoffice)",
           "event": [
             {
@@ -76,6 +81,8 @@
       "name": "1. Auth",
       "item": [
         {
+=======
+>>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
           "name": "Login Automático",
           "event": [
             {

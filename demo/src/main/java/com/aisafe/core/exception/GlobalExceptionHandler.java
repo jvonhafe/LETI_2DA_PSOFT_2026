@@ -1,7 +1,10 @@
 package com.aisafe.core.exception;
 
 import org.springframework.http.HttpStatus;
+<<<<<<< HEAD
 import org.springframework.security.access.AccessDeniedException; // NOVO IMPORT PARA O JWT
+=======
+>>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,6 +32,7 @@ public class GlobalExceptionHandler {
         return errors;
     }
 
+<<<<<<< HEAD
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public Map<String, String> handleIllegalArgumentException(IllegalArgumentException ex) {
@@ -64,12 +68,48 @@ public class GlobalExceptionHandler {
         error.put("error", "Acesso Negado: Não tem permissões suficientes para executar esta ação.");
         return error;
     }
+=======
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Map<String, String> handleIllegalArgumentException(
+            IllegalArgumentException ex) {
+
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+
+        return error;
+    }
+
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public Map<String, String> handleResourceNotFoundException(
+            ResourceNotFoundException ex) {
+
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+
+        return error;
+    }
+
+>>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public Map<String, String> handleGenericException(Exception ex) {
+<<<<<<< HEAD
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
         return error;
     }
+=======
+
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+
+        return error;
+    }
+
+>>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
 }

@@ -1,6 +1,9 @@
 package com.aisafe.application.airport;
 
+<<<<<<< HEAD
 import com.aisafe.core.exception.DuplicateResourceException;
+=======
+>>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
 import com.aisafe.model.Airport;
 import com.aisafe.model.Facility;
 import com.aisafe.model.IataCode;
@@ -23,7 +26,11 @@ public class RegisterDetailedAirportUseCase {
 
         // Validar se o aeroporto já existe na Base de Dados
         if (airportRepository.existsById(iataCode)) {
+<<<<<<< HEAD
             throw new DuplicateResourceException("O Aeroporto com IATA " + dto.iataCode + " já existe!");
+=======
+            throw new IllegalArgumentException("O Aeroporto com IATA " + dto.iataCode + " já existe!");
+>>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
         }
 
         // 2.Criar o objeto usando o CONSTRUTOR do Airport
@@ -33,7 +40,11 @@ public class RegisterDetailedAirportUseCase {
                 dto.city,
                 dto.country,
                 dto.timezone,
+<<<<<<< HEAD
                 "OPERATIONAL"
+=======
+                "OPERATIONAL" // Status inicial por defeito
+>>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
         );
 
         // 3. Adicionar as Instalações
@@ -44,7 +55,11 @@ public class RegisterDetailedAirportUseCase {
                 facility.setCapacity(fDto.capacity);
                 facility.setDescription(fDto.description);
 
+<<<<<<< HEAD
                 airport.addFacility(facility);
+=======
+                airport.addFacility(facility); // Usa o método do Airport.java
+>>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
             }
         }
 
@@ -55,7 +70,11 @@ public class RegisterDetailedAirportUseCase {
                 image.setImageUrl(iDto.imageUrl);
                 image.setDescription(iDto.description);
 
+<<<<<<< HEAD
                 airport.addImage(image);
+=======
+                airport.addImage(image); // Usa o método do Airport.java
+>>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
             }
         }
 

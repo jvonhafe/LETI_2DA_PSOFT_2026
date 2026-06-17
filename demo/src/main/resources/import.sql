@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 -- 1. CRIAR OS UTILIZADORES (Para testares a Segurança JWT no Postman)
 -- A password de todos é 'password123' (já encriptada ou validada no teu AuthController)
 INSERT INTO users (username, password, role) VALUES ('backoffice', 'password123', 'ROLE_BACKOFFICE');
@@ -31,3 +32,23 @@ INSERT INTO route (origin_id, destination_id, minimum_range, minimum_capacity, i
 INSERT INTO route (origin_id, destination_id, minimum_range, minimum_capacity, is_active) VALUES ('LIS', 'MAD', 500, 100, true);
 INSERT INTO route (origin_id, destination_id, minimum_range, minimum_capacity, is_active) VALUES ('MAD', 'JFK', 6000, 200, true);
 INSERT INTO route (origin_id, destination_id, minimum_range, minimum_capacity, is_active) VALUES ('OPO', 'MAD', 450, 80, true);
+=======
+-- 1. Bootstrap de Utilizadores (WP #0A)
+-- Se já tiveres a tabela 'users' criada
+INSERT INTO users (username, password, role) VALUES ('admin', 'admin123', 'ADMIN');
+INSERT INTO users (username, password, role) VALUES ('atcc_user', 'password123', 'ATCC');
+
+-- 2. Bootstrap de Fabricantes e Modelos (WP #0A / WP #1A)
+-- Isto ajuda a Pessoa 2 (Aeronaves)
+INSERT INTO manufacturers (id, name) VALUES (1, 'Airbus'), (2, 'Boeing'), (3, 'Embraer');
+
+-- 3. Bootstrap de Aeroportos (WP #2A)
+-- Isto ajuda a Pessoa 3 (Rotas) a ter destinos para testar
+INSERT INTO airport (iata_code, name, city, country, status) VALUES ('LIS', 'Aeroporto Humberto Delgado', 'Lisboa', 'Portugal', 'OPERATIONAL');
+INSERT INTO airport (iata_code, name, city, country, status) VALUES ('OPO', 'Aeroporto Francisco Sá Carneiro', 'Porto', 'Portugal', 'OPERATIONAL');
+INSERT INTO airport (iata_code, name, city, country, status) VALUES ('CDG', 'Charles de Gaulle', 'Paris', 'França', 'OPERATIONAL');
+
+-- 4. Templates de Manutenção (WP #4A)
+-- Isto ajuda a Pessoa 4
+INSERT INTO maintenance_templates (name, type) VALUES ('Check A', 'INSPECTION'), ('Check B', 'SCHEDULED');
+>>>>>>> 987052eedb031394fba250f4e0e571285ef997aa

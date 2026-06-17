@@ -18,7 +18,11 @@ public class IataCode implements Serializable {
             throw new IllegalArgumentException("O código IATA não pode ser nulo ou vazio.");
         }
         String cleanCode = code.trim().toUpperCase();
+<<<<<<< HEAD
         if (code == null || !code.matches("^[A-Z]{3}$")) {
+=======
+        if (!cleanCode.matches("^[A-Z]{3}$")) {
+>>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
             throw new IllegalArgumentException("O código IATA tem de ter exatamente 3 letras (ex: LIS, OPO).");
         }
         this.code = cleanCode;
