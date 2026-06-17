@@ -12,14 +12,11 @@ import java.util.List;
 
 @Repository
 public interface AirportRepository extends JpaRepository<Airport, IataCode> {
+
     List<Airport> findByCityContainingIgnoreCase(String city);
 
     @Query("SELECT a.iataCode.code AS iata, a.name AS name, " +
-<<<<<<< HEAD
             "(SELECT COUNT(r) FROM Route r WHERE r.originAirport.iataCode = a.iataCode OR r.destinationAirport.iataCode = a.iataCode) AS totalRoutes " +
-=======
-            "(SELECT COUNT(r) FROM Route r WHERE r.origin = a.iataCode OR r.destination = a.iataCode) AS totalRoutes " +
->>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
             "FROM Airport a " +
             "ORDER BY totalRoutes DESC")
     List<BusiestAirportDto> findBusiestAirports(Pageable pageable);

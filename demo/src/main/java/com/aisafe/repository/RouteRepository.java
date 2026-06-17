@@ -9,17 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-
 import java.util.List;
 
 @Repository
 public interface RouteRepository extends JpaRepository<Route, Long> {
 
-<<<<<<< HEAD
     @Query("SELECT r FROM Route r WHERE r.originAirport.iataCode = :airport OR r.destinationAirport.iataCode = :airport")
-=======
-    @Query("SELECT r FROM Route r WHERE r.origin = :airport OR r.destination = :airport")
->>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
     List<Route> findRoutesByAirport(@Param("airport") IataCode airport);
 
     List<Route> findByOriginAirport(Airport originAirport);

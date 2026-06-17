@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 -- 1. CRIAR OS UTILIZADORES (Para testares a Segurança JWT no Postman)
 -- A password de todos é 'password123' (já encriptada ou validada no teu AuthController)
 INSERT INTO users (username, password, role) VALUES ('backoffice', 'password123', 'ROLE_BACKOFFICE');
@@ -51,4 +51,3 @@ INSERT INTO airport (iata_code, name, city, country, status) VALUES ('CDG', 'Cha
 -- 4. Templates de Manutenção (WP #4A)
 -- Isto ajuda a Pessoa 4
 INSERT INTO maintenance_templates (name, type) VALUES ('Check A', 'INSPECTION'), ('Check B', 'SCHEDULED');
->>>>>>> 987052eedb031394fba250f4e0e571285ef997aa
