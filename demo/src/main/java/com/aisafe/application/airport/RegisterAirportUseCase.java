@@ -1,4 +1,4 @@
-package com.aisafe.application.airport; // ou com.aisafe.usecase.airport
+package com.aisafe.application.airport;
 
 import com.aisafe.model.Airport;
 import com.aisafe.repository.AirportRepository;
