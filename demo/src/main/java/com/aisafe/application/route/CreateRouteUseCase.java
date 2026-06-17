@@ -1,5 +1,9 @@
 package com.aisafe.application.route;
 
+
+import com.aisafe.core.exception.DuplicateResourceException;
+
+
 import com.aisafe.model.Airport;
 import com.aisafe.model.Route;
 import com.aisafe.model.RouteStatus;
@@ -36,7 +40,9 @@ public class CreateRouteUseCase {
 
         if (routeRepository.existsByOriginAirportAndDestinationAirportAndStatus(
                 origin, destination, RouteStatus.ACTIVE)) {
-            throw new IllegalArgumentException("An active route already exists between these airports.");
+
+            throw new DuplicateResourceException("An active route already exists between these airports.");
+
         }
 
         Route route = new Route();

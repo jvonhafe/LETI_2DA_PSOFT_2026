@@ -10,17 +10,20 @@ public class IataCode implements Serializable {
     private String code;
 
     protected IataCode() {
-
     }
 
     public IataCode(String code) {
         if (code == null || code.trim().isEmpty()) {
             throw new IllegalArgumentException("O código IATA não pode ser nulo ou vazio.");
         }
+
         String cleanCode = code.trim().toUpperCase();
+
+        // Validação: 3 letras exatamente
         if (!cleanCode.matches("^[A-Z]{3}$")) {
             throw new IllegalArgumentException("O código IATA tem de ter exatamente 3 letras (ex: LIS, OPO).");
         }
+
         this.code = cleanCode;
     }
 
