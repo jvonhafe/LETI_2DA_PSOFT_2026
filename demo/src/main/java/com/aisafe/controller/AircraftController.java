@@ -4,8 +4,11 @@ import com.aisafe.application.aircraft.RegisterAircraftUseCase;
 import com.aisafe.core.exception.AircraftNotFoundException;
 import com.aisafe.model.Aircraft;
 import com.aisafe.model.AircraftRegistration;
+import com.aisafe.model.Route;
 import com.aisafe.repository.AircraftRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.aisafe.application.aircraft.GetCompatibleRoutesUseCase;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,10 +19,12 @@ public class AircraftController {
 
     private final RegisterAircraftUseCase registerUseCase;
     private final AircraftRepository aircraftRepository;
+    private final GetCompatibleRoutesUseCase getCompatibleRoutesUseCase;
 
-    public AircraftController(RegisterAircraftUseCase registerUseCase, AircraftRepository aircraftRepository) {
+    public AircraftController(RegisterAircraftUseCase registerUseCase, AircraftRepository aircraftRepository, GetCompatibleRoutesUseCase getCompatibleRoutesUseCase) {
         this.registerUseCase = registerUseCase;
         this.aircraftRepository = aircraftRepository;
+        this.getCompatibleRoutesUseCase = getCompatibleRoutesUseCase;
     }
 
     @PostMapping
@@ -56,5 +61,11 @@ public class AircraftController {
         public String modelId;
         public LocalDate manufacturingDate;
         public String status;
+    }
+
+    @GetMapping("/{registration}/compatible-routes")
+    public ResponseEntity<List<Route>> getCompatibleRoutes(@PathVariable String registration) {
+        List<Route> compatibleRoutes = getCompatibleRoutesUseCase.execute(registration);
+        return ResponseEntity.ok(compatibleRoutes);
     }
 }

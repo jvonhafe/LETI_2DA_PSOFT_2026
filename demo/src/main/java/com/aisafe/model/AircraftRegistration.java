@@ -18,10 +18,8 @@ public class AircraftRegistration {
             throw new IllegalArgumentException("A matrícula não pode ser nula.");
         }
 
-        // 🧠 Passa para maiúsculas antes de validar com a Regex!
         String upperReg = registration.toUpperCase().trim();
 
-        // Se o teu grupo quer obrigar o uso do hífen internacional (ex: CS-TTO):
         if (!upperReg.matches("^[A-Z0-9]{1,5}-[A-Z0-9]{1,5}$")) {
             throw new IllegalArgumentException("Matrícula inválida. Deve seguir o formato internacional (ex: CS-TTO).");
         }
