@@ -1,7 +1,7 @@
 ﻿{
   "info": {
     "name": "LETI_2DA_PSOFT_2026 - Defesa Final",
-    "description": "Coleção com todas as US. O token JWT é extraído automaticamente no Login e herdado por todos os pedidos. As US específicas (108 e série 200) estão na pasta 6.",
+    "description": "Coleção com todas as US. O token JWT é extraído automaticamente no Login e herdado por todos os pedidos.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -37,17 +37,12 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Requisito 3.6.2 - Autenticação JWT com Sucesso\", function () {",
+                  "pm.test(\"Autenticação JWT com Sucesso\", function () {",
                   "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
                   "});",
-                  "",
                   "if (pm.response.code === 200 || pm.response.code === 201) {",
                   "    var jsonData = pm.response.json();",
-                  "    pm.test(\"Token JWT extraído e guardado\", function () {",
-                  "        pm.expect(jsonData).to.have.property('token');",
-                  "        pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
-                  "        console.log(\"Token guardado com sucesso!\");",
-                  "    });",
+                  "    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
                   "}"
                 ],
                 "type": "text/javascript"
@@ -56,13 +51,142 @@
           ],
           "request": {
             "method": "POST",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "*/*" }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n    \"username\": \"backoffice\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Automático (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Autenticação JWT com Sucesso\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Automático (ATCC)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Autenticação JWT com Sucesso\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"atcc_user\",\n    \"password\": \"atcc123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Automático (Maintenance Tech)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Autenticação JWT com Sucesso\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"tech\",\n    \"password\": \"tech123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Automático (Maintenance Supervisor)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Autenticação JWT com Sucesso\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"supervisor\",\n    \"password\": \"super123\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/auth/login",
@@ -74,7 +198,7 @@
       ]
     },
     {
-      "name": "2. Airports (Série 100 base)",
+      "name": "2. Airports",
       "item": [
         {
           "name": "US106 - Registar Aeroporto",
@@ -154,6 +278,173 @@
               "path": ["airports", "LIS", "status"],
               "query": [
                 { "key": "status", "value": "CLOSED" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "US108 - Pesquisar Aeroporto por Cidade",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US108 - Pesquisa devolveu resultados (200 OK)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/airports/search?city=Porto",
+              "host": ["{{base_url}}"],
+              "path": ["airports", "search"],
+              "query": [
+                { "key": "city", "value": "Porto" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "US207 - Registar Aeroporto Detalhado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US207 - Aeroporto Detalhado criado (201 Created)\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"iataCode\": \"CDG\",\n  \"name\": \"Charles de Gaulle\",\n  \"city\": \"Paris\",\n  \"country\": \"France\",\n  \"timezone\": \"CET\",\n  \"facilities\": [\n    { \"type\": \"Terminal\", \"capacity\": 50000, \"description\": \"Terminal 1\" }\n  ],\n  \"images\": [\n    { \"imageUrl\": \"https://example.com/foto.jpg\", \"description\": \"Vista aérea\" }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/airports/detailed",
+              "host": ["{{base_url}}"],
+              "path": ["airports", "detailed"]
+            }
+          }
+        },
+        {
+          "name": "US208 - Atualizar Detalhes (Contactos/Horários)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US208 - Detalhes atualizados (200 OK)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contactInfo\": {\n    \"email\": \"geral@aeroporto.pt\",\n    \"phoneNumber\": \"+351 912345678\"\n  },\n  \"operatingHours\": {\n    \"openingTime\": \"06:00\",\n    \"closingTime\": \"23:59\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/airports/OPO/details",
+              "host": ["{{base_url}}"],
+              "path": ["airports", "OPO", "details"]
+            }
+          }
+        },
+        {
+          "name": "US209 - Rotas que Partem ou Chegam (CQRS)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US209 - Consulta CQRS obteve resultados (200 OK)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/routes/airport/OPO",
+              "host": ["{{base_url}}"],
+              "path": ["routes", "airport", "OPO"]
+            }
+          }
+        },
+        {
+          "name": "US210 - Estatísticas Busiest Airports",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US210 - Estatísticas geradas com sucesso (200 OK)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/airports/statistics/busiest?limit=3",
+              "host": ["{{base_url}}"],
+              "path": ["airports", "statistics", "busiest"],
+              "query": [
+                { "key": "limit", "value": "3" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "US211 - Aeroportos Agrupados",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US211 - Agrupamento devolvido (200 OK)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/airports/grouped?by=country",
+              "host": ["{{base_url}}"],
+              "path": ["airports", "grouped"],
+              "query": [
+                { "key": "by", "value": "country" }
               ]
             }
           }
@@ -319,178 +610,6 @@
               "raw": "{{base_url}}/maintenance-records",
               "host": ["{{base_url}}"],
               "path": ["maintenance-records"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "6. As Minhas US (108 e Série 200)",
-      "item": [
-        {
-          "name": "US108 - Pesquisar Aeroporto por Cidade",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"US108 - Pesquisa devolveu resultados (200 OK)\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url}}/airports/search?city=Porto",
-              "host": ["{{base_url}}"],
-              "path": ["airports", "search"],
-              "query": [
-                { "key": "city", "value": "Porto" }
-              ]
-            }
-          }
-        },
-        {
-          "name": "US207 - Registar Aeroporto Detalhado",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"US207 - Aeroporto Detalhado criado (201 Created)\", function () {",
-                  "    pm.response.to.have.status(201);",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"iataCode\": \"CDG\",\n  \"name\": \"Charles de Gaulle\",\n  \"city\": \"Paris\",\n  \"country\": \"France\",\n  \"timezone\": \"CET\",\n  \"facilities\": [\n    { \"type\": \"Terminal\", \"capacity\": 50000, \"description\": \"Terminal 1\" }\n  ],\n  \"images\": [\n    { \"imageUrl\": \"https://example.com/foto.jpg\", \"description\": \"Vista aérea\" }\n  ]\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/airports/detailed",
-              "host": ["{{base_url}}"],
-              "path": ["airports", "detailed"]
-            }
-          }
-        },
-        {
-          "name": "US208 - Atualizar Detalhes (Contactos/Horários)",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"US208 - Detalhes atualizados (200 OK)\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "PATCH",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"contactInfo\": {\n    \"email\": \"geral@aeroporto.pt\",\n    \"phoneNumber\": \"+351 912345678\"\n  },\n  \"operatingHours\": {\n    \"openingTime\": \"06:00\",\n    \"closingTime\": \"23:59\"\n  }\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/airports/OPO/details",
-              "host": ["{{base_url}}"],
-              "path": ["airports", "OPO", "details"]
-            }
-          }
-        },
-        {
-          "name": "US209 - Rotas que Partem ou Chegam (CQRS)",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"US209 - Consulta CQRS obteve resultados (200 OK)\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url}}/routes/airport/OPO",
-              "host": ["{{base_url}}"],
-              "path": ["routes", "airport", "OPO"]
-            }
-          }
-        },
-        {
-          "name": "US210 - Estatísticas Busiest Airports",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"US210 - Estatísticas geradas com sucesso (200 OK)\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url}}/airports/statistics/busiest?limit=3",
-              "host": ["{{base_url}}"],
-              "path": ["airports", "statistics", "busiest"],
-              "query": [
-                { "key": "limit", "value": "3" }
-              ]
-            }
-          }
-        },
-        {
-          "name": "US211 - Aeroportos Agrupados",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"US211 - Agrupamento devolvido (200 OK)\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url}}/airports/grouped?by=country",
-              "host": ["{{base_url}}"],
-              "path": ["airports", "grouped"],
-              "query": [
-                { "key": "by", "value": "country" }
-              ]
             }
           }
         }

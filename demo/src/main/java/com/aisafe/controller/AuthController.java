@@ -27,20 +27,25 @@ public class AuthController {
     @Operation(summary = "Login e geração de token JWT")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-
-        if (request == null || request.username == null || request.password == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas: Faltam dados.");
-        }
+        System.out.println("DEBUG: Tentativa de login para username: " + request.username);
 
         Optional<User> userOptional = userRepository.findByUsername(request.username);
 
-        if (userOptional.isEmpty() || !userOptional.get().getPassword().equals(request.password)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas: Username ou password errados.");
+        if (userOptional.isEmpty()) {
+            System.out.println("DEBUG: Utilizador não encontrado!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username não existe.");
         }
 
         User user = userOptional.get();
-        String token = jwtService.generateToken(user);
+        System.out.println("DEBUG: Password esperada: " + user.getPassword());
+        System.out.println("DEBUG: Password recebida: " + request.password);
 
+        if (!user.getPassword().equals(request.password)) {
+            System.out.println("DEBUG: Password incorreta!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Password errada.");
+        }
+
+        String token = jwtService.generateToken(user);
         return ResponseEntity.ok(new LoginResponse(token));
     }
 

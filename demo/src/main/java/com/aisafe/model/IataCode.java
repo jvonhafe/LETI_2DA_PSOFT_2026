@@ -1,5 +1,7 @@
 package com.aisafe.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -12,6 +14,7 @@ public class IataCode implements Serializable {
     protected IataCode() {
     }
 
+    @JsonCreator
     public IataCode(String code) {
         if (code == null || code.trim().isEmpty()) {
             throw new IllegalArgumentException("O código IATA não pode ser nulo ou vazio.");
@@ -27,6 +30,8 @@ public class IataCode implements Serializable {
         this.code = cleanCode;
     }
 
+    // A anotação @JsonValue diz ao Spring que quando for para devolver em JSON, deve devolver apenas esta String
+    @JsonValue
     public String getCode() {
         return code;
     }

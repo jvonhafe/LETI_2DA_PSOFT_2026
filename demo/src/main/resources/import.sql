@@ -1,9 +1,10 @@
 
 -- 1. CRIAR OS UTILIZADORES (Para testares a Segurança JWT no Postman)
--- A password de todos é 'password123' (já encriptada ou validada no teu AuthController)
-INSERT INTO users (username, password, role) VALUES ('backoffice', 'password123', 'ROLE_BACKOFFICE');
-INSERT INTO users (username, password, role) VALUES ('admin', 'admin123', 'ROLE_ADMIN');
-INSERT INTO users (username, password, role) VALUES ('atcc_user', 'atcc123', 'ROLE_ATCC');
+INSERT INTO users (username, password, role) VALUES ('backoffice', 'password123', 'BACKOFFICE');
+INSERT INTO users (username, password, role) VALUES ('admin', 'admin123', 'ADMIN');
+INSERT INTO users (username, password, role) VALUES ('atcc_user', 'atcc123', 'ATCC');
+INSERT INTO users (username, password, role) VALUES ('tech', 'tech123', 'MAINTENANCE_TECH');
+INSERT INTO users (username, password, role) VALUES ('supervisor', 'super123', 'MAINTENANCE_SUPERVISOR');
 
 -- 2. CRIAR AEROPORTOS (Dados Realistas)
 INSERT INTO airport (iata_code, name, city, country, timezone, status, email, phone_number, opening_time, closing_time)
