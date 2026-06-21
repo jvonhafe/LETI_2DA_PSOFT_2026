@@ -9,9 +9,10 @@ import java.util.List;
 public class MaintenanceRecord {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    // US123 / NFR Fase 2: Concorrência (Optimistic Locking)
+
     @Version
     private Long version;
 

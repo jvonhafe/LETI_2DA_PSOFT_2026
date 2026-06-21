@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -46,6 +47,7 @@ public class MaintenanceRecordController {
 
     @Operation(summary = "US217 - Criar e Categorizar Registro de Manutenção")
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTENANCE_TECH')")// exemplo
     @ResponseStatus(HttpStatus.CREATED)
     public MaintenanceRecord createRecord(@Valid @RequestBody MaintenanceRecord record) {
         return scheduleMaintenanceUseCase.execute(record);

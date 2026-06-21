@@ -607,9 +607,9 @@
               "raw": "{\n  \"id\": \"MNT-101\",\n  \"aircraftRegistration\": \"CS-TTO\",\n  \"templateId\": 1,\n  \"expectedDurationHours\": 12.5,\n  \"status\": \"SCHEDULED\",\n  \"checklist\": [\"Verificar motores\", \"Inspeção de trem de pouso\"]\n}"
             },
             "url": {
-              "raw": "{{base_url}}/registros-de-manutenação",
+              "raw": "{{base_url}}/maintenance-records",
               "host": ["{{base_url}}"],
-              "path": ["registros-de-manutenação"]
+              "path": ["maintenance-records"]
             }
           }
         },
@@ -618,9 +618,9 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/registros-de-manutenação/aeronave/CS-TTO",
+              "raw": "{{base_url}}/maintenance-records/aircraft/CS-TTO",
               "host": ["{{base_url}}"],
-              "path": ["registros-de-manutenação", "aeronave", "CS-TTO"]
+              "path": ["maintenance-records", "aircraft", "CS-TTO"]
             }
           }
         },
@@ -629,9 +629,9 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/registros-de-manutenação/aeronave/CS-TTO/horas",
+              "raw": "{{base_url}}/maintenance-records/aircraft/CS-TTO/hours",
               "host": ["{{base_url}}"],
-              "path": ["registros-de-manutenação", "aeronave", "CS-TTO", "horas"]
+              "path": ["maintenance-records", "aircraft", "CS-TTO", "hours"]
             }
           }
         },
@@ -645,9 +645,9 @@
               "raw": "{\n  \"aircraftRegistration\": \"CS-TTO\",\n  \"component\": \"ENGINE\",\n  \"expectedDurationHours\": 8.0,\n  \"status\": \"SCHEDULED\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/registros-de-manutenação",
+              "raw": "{{base_url}}/maintenance-records",
               "host": ["{{base_url}}"],
-              "path": ["registros-de-manutenação"]
+              "path": ["maintenance-records"]
             }
           }
         },
@@ -656,7 +656,7 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/registros-de-manutenação/pesquisa?aircraft=CS-TTO&page=0&size=10",
+              "raw": "{{base_url}}/maintenance-records/search?aircraft=CS-TTO&page=0&size=10",
               "query": [
                 { "key": "aircraft", "value": "CS-TTO" },
                 { "key": "page", "value": "0" },
@@ -670,9 +670,9 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/registros-de-manutenação/em-andamento",
+              "raw": "{{base_url}}/maintenance-records/ongoing",
               "host": ["{{base_url}}"],
-              "path": ["registros-de-manutenação", "em-andamento"]
+              "path": ["maintenance-records", "ongoing"]
             }
           }
         },
@@ -681,9 +681,9 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/registros-de-manutenação/relatórios/custos/modelo",
+              "raw": "{{base_url}}/maintenance-records/reports/costs/aircraft",
               "host": ["{{base_url}}"],
-              "path": ["registros-de-manutenação", "relatórios", "custos", "modelo"]
+              "path": ["maintenance-records", "reports", "costs", "model"]
             }
           }
         },
@@ -692,9 +692,9 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/registros-de-manutenação/relatórios/tempo-de-retorno",
+              "raw": "{{base_url}}/maintenance-records/reports/turnaround-time",
               "host": ["{{base_url}}"],
-              "path": ["registros-de-manutenação", "relatórios", "tempo-de-retorno"]
+              "path": ["maintenance-records", "reports", "turnaround-time"]
             }
           }
         },
@@ -703,9 +703,9 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/registros-de-manutenação/alertas",
+              "raw": "{{base_url}}/maintenance-records/alerts",
               "host": ["{{base_url}}"],
-              "path": ["registros-de-manutenação", "alertas"]
+              "path": ["maintenance-records", "alerts"]
             }
           }
         }
