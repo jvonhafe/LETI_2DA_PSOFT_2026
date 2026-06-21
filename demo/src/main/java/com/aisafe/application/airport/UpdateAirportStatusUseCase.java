@@ -20,7 +20,7 @@ public class UpdateAirportStatusUseCase {
         Airport airport = airportRepository.findById(searchId)
                 .orElseThrow(() -> new ResourceNotFoundException("Aeroporto não encontrado: " + iata));
 
-        airport.updateStatus(newStatus); // Regra de domínio!
+        airport.updateStatus(newStatus);
         return airportRepository.save(airport);
     }
 }
