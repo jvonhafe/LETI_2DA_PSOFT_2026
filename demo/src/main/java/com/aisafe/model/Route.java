@@ -25,6 +25,8 @@ public class Route {
 
     private Integer minimumCapacity;
 
+    private Double distanceKm;
+
     @Enumerated(EnumType.STRING)
     private RouteStatus status = RouteStatus.ACTIVE;
 

@@ -20,7 +20,8 @@ public class UpdateRouteUseCase {
     public Route execute(Long id,
                          Integer estimatedFlightTimeMinutes,
                          Integer minimumRange,
-                         Integer minimumCapacity) {
+                         Integer minimumCapacity,
+                         Double distanceKm) {
 
         Route route = helper.getRoute(id);
 
@@ -40,6 +41,10 @@ public class UpdateRouteUseCase {
             throw new IllegalArgumentException("Minimum capacity must be greater than zero.");
         }
 
+        if (distanceKm != null && distanceKm <= 0) {
+            throw new IllegalArgumentException("Distance must be greater than zero.");
+        }
+
         if (estimatedFlightTimeMinutes != null) {
             route.setEstimatedFlightTimeMinutes(estimatedFlightTimeMinutes);
         }
@@ -50,6 +55,10 @@ public class UpdateRouteUseCase {
 
         if (minimumCapacity != null) {
             route.setMinimumCapacity(minimumCapacity);
+        }
+
+        if (distanceKm != null) {
+            route.setDistanceKm(distanceKm);
         }
 
         Route updatedRoute = routeRepository.save(route);

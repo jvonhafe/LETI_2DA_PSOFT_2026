@@ -26,7 +26,7 @@ public class RouteController {
     private final CreateRouteUseCase createRouteUseCase;
     private final GetRouteByIdUseCase getRouteByIdUseCase;
     private final GetRoutesFromAirportUseCase getRoutesFromAirportUseCase;
-    private final SearchRoutesUseCase searchRoutesUseCase;
+    private final SearchRouteUseCase searchRoutesUseCase;
     private final UpdateRouteUseCase updateRouteUseCase;
     private final DeactivateRouteUseCase deactivateRouteUseCase;
     private final GetRouteHistoryUseCase getRouteHistoryUseCase;
@@ -36,7 +36,7 @@ public class RouteController {
     public RouteController(CreateRouteUseCase createRouteUseCase,
                            GetRouteByIdUseCase getRouteByIdUseCase,
                            GetRoutesFromAirportUseCase getRoutesFromAirportUseCase,
-                           SearchRoutesUseCase searchRoutesUseCase,
+                           SearchRouteUseCase searchRoutesUseCase,
                            UpdateRouteUseCase updateRouteUseCase,
                            DeactivateRouteUseCase deactivateRouteUseCase,
                            GetRouteHistoryUseCase getRouteHistoryUseCase,
@@ -51,8 +51,6 @@ public class RouteController {
         this.routeRepository = routeRepository;
     }
 
-    // --- SÉRIE 100 (Com Segurança Adicionada) ---
-
     @Operation(summary = "Criar Rota")
     @PreAuthorize("hasAnyRole('ADMIN', 'BACKOFFICE')") // Apenas escrita!
     @PostMapping
@@ -63,7 +61,8 @@ public class RouteController {
                 request.destinationAirport,
                 request.estimatedFlightTimeMinutes,
                 request.minimumRange,
-                request.minimumCapacity
+                request.minimumCapacity,
+                request.distanceKm
         );
     }
 
@@ -98,7 +97,8 @@ public class RouteController {
                 id,
                 request.estimatedFlightTimeMinutes,
                 request.minimumRange,
-                request.minimumCapacity
+                request.minimumCapacity,
+                request.distanceKm
         );
     }
 
@@ -116,21 +116,15 @@ public class RouteController {
         return getRouteHistoryUseCase.execute(id);
     }
 
-    // --- NOVO: US209 (Padrão CQRS, sem Use Case) ---
-
     @Operation(summary = "US209: Consultar rotas que partem ou chegam a um Aeroporto")
     @PreAuthorize("hasAnyRole('ADMIN', 'BACKOFFICE', 'ATCC')") // Leitura livre
     @GetMapping("/airport/{iata}")
     public List<Route> getRoutesByAirport(@PathVariable String iata) {
 
-        // 1. Fail-Fast: Valida se o formato do IATA está correto instanciando o Value Object
         IataCode airportIata = new IataCode(iata);
 
-        // 2. O Controller pede diretamente à Base de Dados (Query)
         return routeRepository.findRoutesByAirport(airportIata);
     }
-
-    // --- DTOs ---
 
     public static class CreateRouteRequest {
         public String originAirport;
@@ -138,11 +132,13 @@ public class RouteController {
         public Integer estimatedFlightTimeMinutes;
         public Integer minimumRange;
         public Integer minimumCapacity;
+        public Double distanceKm;
     }
 
     public static class UpdateRouteRequest {
         public Integer estimatedFlightTimeMinutes;
         public Integer minimumRange;
         public Integer minimumCapacity;
+        public Double distanceKm;
     }
 }

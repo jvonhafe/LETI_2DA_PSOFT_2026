@@ -41,7 +41,8 @@ public class RouteUseCaseHelper {
                                    String destinationCode,
                                    Integer estimatedFlightTimeMinutes,
                                    Integer minimumRange,
-                                   Integer minimumCapacity) {
+                                   Integer minimumCapacity,
+                                   Double distanceKm) {
 
         if (originCode == null || !originCode.matches("[A-Za-z]{3}")) {
             throw new IllegalArgumentException("Origin airport must be a valid 3-letter IATA code.");
@@ -61,6 +62,10 @@ public class RouteUseCaseHelper {
 
         if (minimumCapacity == null || minimumCapacity <= 0) {
             throw new IllegalArgumentException("Minimum capacity must be greater than zero.");
+        }
+
+        if (distanceKm == null || distanceKm <= 0) {
+            throw new IllegalArgumentException("Distance must be greater than zero.");
         }
     }
 

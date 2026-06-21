@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SearchRoutesUseCase {
+public class SearchRouteUseCase {
 
     private final RouteRepository routeRepository;
     private final RouteUseCaseHelper helper;
 
-    public SearchRoutesUseCase(RouteRepository routeRepository,
-                               RouteUseCaseHelper helper) {
+    public SearchRouteUseCase(RouteRepository routeRepository,
+                              RouteUseCaseHelper helper) {
         this.routeRepository = routeRepository;
         this.helper = helper;
     }
