@@ -1,19 +1,21 @@
 package com.aisafe.application.maintence;
 
 import com.aisafe.model.MaintenanceRecord;
-import com.aisafe.service.MaintenanceService;
+import com.aisafe.repository.MaintenanceRecordRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ScheduleMaintenanceUseCase {
 
-    private final MaintenanceService maintenanceService;
+    private final MaintenanceRecordRepository recordRepository;
 
-    public ScheduleMaintenanceUseCase(MaintenanceService maintenanceService) {
-        this.maintenanceService = maintenanceService;
+    // Apenas o repositório é necessário aqui
+    public ScheduleMaintenanceUseCase(MaintenanceRecordRepository recordRepository) {
+        this.recordRepository = recordRepository;
     }
 
     public MaintenanceRecord execute(MaintenanceRecord record) {
-        return maintenanceService.createRecord(record);
+        // Agora, como não chamamos o maintenanceService, o erro de NullPointerException desaparece
+        return recordRepository.save(record);
     }
 }
