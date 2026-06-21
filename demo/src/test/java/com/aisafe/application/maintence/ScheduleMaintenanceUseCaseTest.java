@@ -57,4 +57,24 @@ public class ScheduleMaintenanceUseCaseTest {
 
         verify(recordRepository, times(1)).save(any(MaintenanceRecord.class));
     }
+    @Test
+    void execute_ShouldSaveRecordWithCorrectComponent_US217() {
+        // Arrange: Garantir que o componente é definido corretamente
+        MaintenanceRecord recordToSave = new MaintenanceRecord();
+        recordToSave.setAircraftRegistration("CS-TPA");
+        recordToSave.setComponent(MaintenanceComponent.AVIONICS); // A US217 exige isto
+        recordToSave.setStatus("SCHEDULED");
+
+        when(recordRepository.save(any(MaintenanceRecord.class))).thenReturn(recordToSave);
+
+        // Act
+        MaintenanceRecord savedRecord = scheduleMaintenanceUseCase.execute(recordToSave);
+
+        // Assert: Validar a categorização da US217
+        assertNotNull(savedRecord);
+        assertEquals(MaintenanceComponent.AVIONICS, savedRecord.getComponent(),
+                "A US217 falhou: O componente não foi guardado corretamente.");
+
+        verify(recordRepository, times(1)).save(recordToSave);
+    }
 }
