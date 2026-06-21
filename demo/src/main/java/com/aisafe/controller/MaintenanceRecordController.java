@@ -53,13 +53,13 @@ public class MaintenanceRecordController {
         return scheduleMaintenanceUseCase.execute(record);
     }
 
-    @Operation(summary = "Listar Registos de Manutenção por Aeronave")
+    @Operation(summary = "US116 - Listar Registos de Manutenção por Aeronave")
     @GetMapping("/aircraft/{registration}")
     public List<MaintenanceRecord> recordsForAircraft(@PathVariable String registration) {
         return maintenanceService.recordsForAircraft(registration);
     }
 
-    @Operation(summary = "Ver Total de Horas de Manutenção de uma Aeronave")
+    @Operation(summary = "US117 - Ver Total de Horas de Manutenção de uma Aeronave")
     @GetMapping("/aircraft/{registration}/hours")
     public Map<String, Object> totalHoursForAircraft(@PathVariable String registration) {
         return Map.of(
@@ -77,7 +77,7 @@ public class MaintenanceRecordController {
         );
     }
 
-    @Operation(summary = "Completar Registo de Manutenção")
+    @Operation(summary = "Completar Registo de Manutenção")//us 119 falta postman
     @PatchMapping("/{recordId}/complete")
     public MaintenanceRecord completeRecord(
             @PathVariable String recordId,
