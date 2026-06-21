@@ -604,7 +604,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"id\": \"MNT-101\",\n  \"aircraftRegistration\": \"CS-TTO\",\n  \"templateId\": 1,\n  \"expectedDurationHours\": 12.5,\n  \"status\": \"SCHEDULED\",\n  \"checklist\": [\"Verificar motores\", \"Inspeção de trem de pouso\"]\n}"
+              "raw": "{\n \"aircraftRegistration\": \"CS-TTO\",\n  \"templateId\": 1,\n  \"expectedDurationHours\": 12.5,\n  \"status\": \"SCHEDULED\",\n  \"checklist\": [\"Verificar motores\", \"Inspeção de trem de pouso\"]\n}"
             },
             "url": {
               "raw": "{{base_url}}/maintenance-records",

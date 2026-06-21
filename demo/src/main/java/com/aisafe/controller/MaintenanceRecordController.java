@@ -47,19 +47,21 @@ public class MaintenanceRecordController {
 
     @Operation(summary = "US217 - Criar e Categorizar Registro de Manutenção")
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTENANCE_TECH')")// exemplo
+    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTENANCE_TECH')")
     @ResponseStatus(HttpStatus.CREATED)
     public MaintenanceRecord createRecord(@Valid @RequestBody MaintenanceRecord record) {
         return scheduleMaintenanceUseCase.execute(record);
     }
 
-    @Operation(summary = "US116 - Listar Registos de Manutenção por Aeronave")
+    @Operation(summary = "Listar Registos de Manutenção por Aeronave")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTENANCE_TECH')")
     @GetMapping("/aircraft/{registration}")
     public List<MaintenanceRecord> recordsForAircraft(@PathVariable String registration) {
         return maintenanceService.recordsForAircraft(registration);
     }
 
-    @Operation(summary = "US117 - Ver Total de Horas de Manutenção de uma Aeronave")
+    @Operation(summary = "Ver Total de Horas de Manutenção de uma Aeronave")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATCC')")
     @GetMapping("/aircraft/{registration}/hours")
     public Map<String, Object> totalHoursForAircraft(@PathVariable String registration) {
         return Map.of(
@@ -77,7 +79,8 @@ public class MaintenanceRecordController {
         );
     }
 
-    @Operation(summary = "Completar Registo de Manutenção")//us 119 falta postman
+    @Operation(summary = "Completar Registo de Manutenção")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTENANCE_TECH')")
     @PatchMapping("/{recordId}/complete")
     public MaintenanceRecord completeRecord(
             @PathVariable String recordId,
@@ -94,6 +97,7 @@ public class MaintenanceRecordController {
     // ==========================================
 
     @Operation(summary = "US218 - Pesquisar Registos (Paginação)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTENANCE_TECH')")
     @GetMapping("/search")
     public Page<MaintenanceRecord> searchRecords(
             @RequestParam(required = false) String aircraft,
@@ -105,30 +109,35 @@ public class MaintenanceRecordController {
     }
 
     @Operation(summary = "US219 - Ver Manutenções em Curso (Paginação)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTENANCE_SUPERVISOR')")
     @GetMapping("/ongoing")
     public Page<MaintenanceRecord> getOngoingActivities(Pageable pageable) {
         return queryService.getOngoingActivities(pageable);
     }
 
     @Operation(summary = "US220 - Custos de Manutenção por Aeronave")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATCC')")
     @GetMapping("/reports/costs/aircraft")
     public List<Map<String, Object>> getCostsPerAircraft() {
         return queryService.getCostsPerAircraft();
     }
 
     @Operation(summary = "US220 - Custos de Manutenção por Modelo")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATCC')")
     @GetMapping("/reports/costs/model")
     public List<Map<String, Object>> getCostsPerModel() {
         return queryService.getCostsPerModel();
     }
 
     @Operation(summary = "US221 - Tempo Médio de Resolução (Turnaround)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTENANCE_SUPERVISOR')")
     @GetMapping("/reports/turnaround-time")
     public List<Map<String, Object>> getTurnaroundTime() {
         return queryService.getAverageTurnaroundTime();
     }
 
     @Operation(summary = "US222 - Alertas de Manutenção Planeada")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATCC')")
     @GetMapping("/alerts")
     public List<Map<String, Object>> getMaintenanceAlerts() {
         // Retorna um mock de alertas pois necessitaria cruzar com o histórico de voos real da Fase 1/2.
