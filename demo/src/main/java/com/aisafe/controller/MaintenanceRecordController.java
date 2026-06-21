@@ -44,7 +44,7 @@ public class MaintenanceRecordController {
         this.queryService = queryService;
     }
 
-    @Operation(summary = "Criar Registo de Manutenção")
+    @Operation(summary = "US217 - Criar e Categorizar Registro de Manutenção")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MaintenanceRecord createRecord(@Valid @RequestBody MaintenanceRecord record) {

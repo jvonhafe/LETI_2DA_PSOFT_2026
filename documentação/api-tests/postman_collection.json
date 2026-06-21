@@ -607,9 +607,105 @@
               "raw": "{\n  \"id\": \"MNT-101\",\n  \"aircraftRegistration\": \"CS-TTO\",\n  \"templateId\": 1,\n  \"expectedDurationHours\": 12.5,\n  \"status\": \"SCHEDULED\",\n  \"checklist\": [\"Verificar motores\", \"Inspeção de trem de pouso\"]\n}"
             },
             "url": {
-              "raw": "{{base_url}}/maintenance-records",
+              "raw": "{{base_url}}/registros-de-manutenação",
               "host": ["{{base_url}}"],
-              "path": ["maintenance-records"]
+              "path": ["registros-de-manutenação"]
+            }
+          }
+        },
+        {
+          "name": "US116 - Listar Registos de uma Aeronave",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/registros-de-manutenação/aeronave/CS-TTO",
+              "host": ["{{base_url}}"],
+              "path": ["registros-de-manutenação", "aeronave", "CS-TTO"]
+            }
+          }
+        },
+        {
+          "name": "US117 - Total de Horas de uma Aeronave",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/registros-de-manutenação/aeronave/CS-TTO/horas",
+              "host": ["{{base_url}}"],
+              "path": ["registros-de-manutenação", "aeronave", "CS-TTO", "horas"]
+            }
+          }
+        },
+        {
+          "name": "US217 - Agendar com Componente",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"aircraftRegistration\": \"CS-TTO\",\n  \"component\": \"ENGINE\",\n  \"expectedDurationHours\": 8.0,\n  \"status\": \"SCHEDULED\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/registros-de-manutenação",
+              "host": ["{{base_url}}"],
+              "path": ["registros-de-manutenação"]
+            }
+          }
+        },
+        {
+          "name": "US218 - Pesquisa Avançada (Paginação)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/registros-de-manutenação/pesquisa?aircraft=CS-TTO&page=0&size=10",
+              "query": [
+                { "key": "aircraft", "value": "CS-TTO" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "US219 - Atividades em Curso",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/registros-de-manutenação/em-andamento",
+              "host": ["{{base_url}}"],
+              "path": ["registros-de-manutenação", "em-andamento"]
+            }
+          }
+        },
+        {
+          "name": "US220 - Custo por Modelo",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/registros-de-manutenação/relatórios/custos/modelo",
+              "host": ["{{base_url}}"],
+              "path": ["registros-de-manutenação", "relatórios", "custos", "modelo"]
+            }
+          }
+        },
+        {
+          "name": "US221 - Tempo de Turnaround",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/registros-de-manutenação/relatórios/tempo-de-retorno",
+              "host": ["{{base_url}}"],
+              "path": ["registros-de-manutenação", "relatórios", "tempo-de-retorno"]
+            }
+          }
+        },
+        {
+          "name": "US222 - Alertas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/registros-de-manutenação/alertas",
+              "host": ["{{base_url}}"],
+              "path": ["registros-de-manutenação", "alertas"]
             }
           }
         }
