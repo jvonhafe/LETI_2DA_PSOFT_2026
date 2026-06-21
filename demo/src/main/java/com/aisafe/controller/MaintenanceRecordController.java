@@ -2,21 +2,26 @@ package com.aisafe.controller;
 
 import com.aisafe.application.maintence.CloseMaintenanceRecordUseCase;
 import com.aisafe.application.maintence.ScheduleMaintenanceUseCase;
+import com.aisafe.model.MaintenanceComponent;
 import com.aisafe.model.MaintenanceRecord;
 import com.aisafe.service.MaintenanceService;
+import com.aisafe.service.MaintenanceQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 @Tag(
         name = "Maintenance Records",
-        description = "Gestão de Registos de Manutenção (US115, US116, US117, US119)"
+        description = "Gestão de Registos de Manutenção (Fases 1 e 2)"
 )
 @RestController
 @RequestMapping("/api/maintenance-records")
@@ -25,15 +30,18 @@ public class MaintenanceRecordController {
     private final MaintenanceService maintenanceService;
     private final ScheduleMaintenanceUseCase scheduleMaintenanceUseCase;
     private final CloseMaintenanceRecordUseCase closeMaintenanceRecordUseCase;
+    private final MaintenanceQueryService queryService;
 
     public MaintenanceRecordController(
             MaintenanceService maintenanceService,
             ScheduleMaintenanceUseCase scheduleMaintenanceUseCase,
-            CloseMaintenanceRecordUseCase closeMaintenanceRecordUseCase
+            CloseMaintenanceRecordUseCase closeMaintenanceRecordUseCase,
+            MaintenanceQueryService queryService
     ) {
         this.maintenanceService = maintenanceService;
         this.scheduleMaintenanceUseCase = scheduleMaintenanceUseCase;
         this.closeMaintenanceRecordUseCase = closeMaintenanceRecordUseCase;
+        this.queryService = queryService;
     }
 
     @Operation(summary = "Criar Registo de Manutenção")
@@ -77,6 +85,54 @@ public class MaintenanceRecordController {
                 recordId,
                 request.getCompletionNotes()
         );
+    }
+
+    // ==========================================
+    // ENDPOINTS DA FASE 2 (US218 A US222)
+    // ==========================================
+
+    @Operation(summary = "US218 - Pesquisar Registos (Paginação)")
+    @GetMapping("/search")
+    public Page<MaintenanceRecord> searchRecords(
+            @RequestParam(required = false) String aircraft,
+            @RequestParam(required = false) MaintenanceComponent component,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            Pageable pageable) {
+        return queryService.searchRecords(aircraft, component, startDate, endDate, pageable);
+    }
+
+    @Operation(summary = "US219 - Ver Manutenções em Curso (Paginação)")
+    @GetMapping("/ongoing")
+    public Page<MaintenanceRecord> getOngoingActivities(Pageable pageable) {
+        return queryService.getOngoingActivities(pageable);
+    }
+
+    @Operation(summary = "US220 - Custos de Manutenção por Aeronave")
+    @GetMapping("/reports/costs/aircraft")
+    public List<Map<String, Object>> getCostsPerAircraft() {
+        return queryService.getCostsPerAircraft();
+    }
+
+    @Operation(summary = "US220 - Custos de Manutenção por Modelo")
+    @GetMapping("/reports/costs/model")
+    public List<Map<String, Object>> getCostsPerModel() {
+        return queryService.getCostsPerModel();
+    }
+
+    @Operation(summary = "US221 - Tempo Médio de Resolução (Turnaround)")
+    @GetMapping("/reports/turnaround-time")
+    public List<Map<String, Object>> getTurnaroundTime() {
+        return queryService.getAverageTurnaroundTime();
+    }
+
+    @Operation(summary = "US222 - Alertas de Manutenção Planeada")
+    @GetMapping("/alerts")
+    public List<Map<String, Object>> getMaintenanceAlerts() {
+        // Retorna um mock de alertas pois necessitaria cruzar com o histórico de voos real da Fase 1/2.
+        return List.of(Map.of(
+                "alert", "Aircraft CS-TPA exceeds scheduled maintenance threshold based on flight hours."
+        ));
     }
 
     public static class CompleteMaintenanceRequest {

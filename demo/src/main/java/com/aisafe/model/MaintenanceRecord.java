@@ -11,10 +11,13 @@ public class MaintenanceRecord {
     @Id
     private String id;
 
+    // US123 / NFR Fase 2: Concorrência (Optimistic Locking)
+    @Version
+    private Long version;
+
     private String aircraftRegistration;
     private Long templateId;
 
-    // 🧠 O atributo que o repositório exige para validar a query de soma!
     private Double expectedDurationHours;
 
     @ElementCollection
@@ -22,6 +25,13 @@ public class MaintenanceRecord {
 
     private String status; // SCHEDULED, IN_PROGRESS, COMPLETED
     private String completionNotes;
+
+    // US217: Categorizar por componente
+    @Enumerated(EnumType.STRING)
+    private MaintenanceComponent component;
+
+    // US220: Gestão de custos
+    private Double cost;
 
     @Embedded
     @AttributeOverrides({
