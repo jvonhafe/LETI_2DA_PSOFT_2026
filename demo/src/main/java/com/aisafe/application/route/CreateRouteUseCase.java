@@ -26,10 +26,14 @@ public class CreateRouteUseCase {
                          String destinationCode,
                          Integer estimatedFlightTimeMinutes,
                          Integer minimumRange,
-                         Integer minimumCapacity) {
+                         Integer minimumCapacity,
+                         Double distanceKm) {
 
         helper.validateRouteInput(originCode, destinationCode,
-                estimatedFlightTimeMinutes, minimumRange, minimumCapacity);
+                estimatedFlightTimeMinutes,
+                minimumRange,
+                minimumCapacity,
+                distanceKm);
 
         Airport origin = helper.getAirport(originCode);
         Airport destination = helper.getAirport(destinationCode);
@@ -51,6 +55,7 @@ public class CreateRouteUseCase {
         route.setEstimatedFlightTimeMinutes(estimatedFlightTimeMinutes);
         route.setMinimumRange(minimumRange);
         route.setMinimumCapacity(minimumCapacity);
+        route.setDistanceKm(distanceKm);
         route.setStatus(RouteStatus.ACTIVE);
 
         Route savedRoute = routeRepository.save(route);
