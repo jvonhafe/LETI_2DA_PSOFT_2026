@@ -22,7 +22,7 @@ public interface MaintenanceRecordRepository extends JpaRepository<MaintenanceRe
     @Query("SELECT SUM(m.expectedDurationHours) FROM MaintenanceRecord m")
     Double totalMaintenanceHoursForFleet();
 
-    // US218: Pesquisa com filtros opcionais e Paginação
+    // US218: Pesquisa avançada com Paginação
     @Query("SELECT m FROM MaintenanceRecord m WHERE " +
             "(:aircraft IS NULL OR m.aircraftRegistration = :aircraft) AND " +
             "(:component IS NULL OR m.component = :component) AND " +
@@ -35,23 +35,23 @@ public interface MaintenanceRecordRepository extends JpaRepository<MaintenanceRe
             @Param("endDate") LocalDate endDate,
             Pageable pageable);
 
-    // US219: Ver atividades em curso com Paginação
+    // US219: Atividades em curso com Paginação
     Page<MaintenanceRecord> findByStatus(String status, Pageable pageable);
 
-    // US220: Custo por avião
+    // US220: Custo por aeronave
     @Query("SELECT m.aircraftRegistration as aircraft, SUM(m.cost) as totalCost FROM MaintenanceRecord m GROUP BY m.aircraftRegistration")
     List<Map<String, Object>> getMaintenanceCostPerAircraft();
 
-    // US220: Custo por modelo de avião
-    @Query("SELECT a.aircraftModel.modelName as model, SUM(m.cost) as totalCost " +
-            "FROM MaintenanceRecord m JOIN Aircraft a ON m.aircraftRegistration = a.registration.registration " +
-            "GROUP BY a.aircraftModel.modelName")
+    // US220: Custo por modelo de avião (Corrigido para usar registrationNumber)
+    @Query("SELECT a.modelId as model, SUM(m.cost) as totalCost " +
+            "FROM MaintenanceRecord m JOIN Aircraft a ON m.aircraftRegistration = a.registrationNumber.registration " +
+            "GROUP BY a.modelId")
     List<Map<String, Object>> getMaintenanceCostPerModel();
 
-    // US221: Tempo médio de turnaround por modelo de avião (em dias)
-    @Query("SELECT a.aircraftModel.modelName as model, AVG(DATEDIFF(DAY, m.period.startDate, m.period.endDate)) as avgTurnaroundDays " +
-            "FROM MaintenanceRecord m JOIN Aircraft a ON m.aircraftRegistration = a.registration.registration " +
+    // US221: Tempo turnaround (Corrigido para usar registrationNumber)
+    @Query("SELECT a.modelId as model, AVG(DATEDIFF(DAY, m.period.startDate, m.period.endDate)) as avgTurnaroundDays " +
+            "FROM MaintenanceRecord m JOIN Aircraft a ON m.aircraftRegistration = a.registrationNumber.registration " +
             "WHERE m.status = 'COMPLETED' " +
-            "GROUP BY a.aircraftModel.modelName")
+            "GROUP BY a.modelId")
     List<Map<String, Object>> getAverageTurnaroundTimePerModel();
 }
