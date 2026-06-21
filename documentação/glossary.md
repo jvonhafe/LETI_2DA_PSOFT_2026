@@ -1,171 +1,158 @@
 # Glossário - AISafe Flight Management System
 
-Este glossário está sincronizado com o diagrama de modelo de domínio atualizado.  
-Todos os conceitos aqui definidos correspondem diretamente às classes representadas no diagrama e refletem as necessidades operacionais e de histórico do sistema.
+Este glossário está rigorosamente sincronizado com o Diagrama de Modelo de Domínio (`diagram.puml`) e com a arquitetura do sistema, englobando todas as funcionalidades desenvolvidas nas séries US 100 e US 200.
 
 ---
 
-## Aircraft Domain
+## 1. Aircraft Domain (Domínio de Aeronaves)
+*(Baseado no diagrama aircraft_DM.puml)*
 
 ### Aircraft
-*(Entity, Aggregate Root)* Representa uma instância física de um avião. É identificado unicamente pela sua matrícula (AircraftRegistration) e inclui informação como a data de fabrico, estado operacional e as suas métricas de utilização.
+*(Aggregate Root)* O agregado principal que representa uma instância física e real de um avião pertencente à frota. Mantém o registo do tempo de utilização através da propriedade `totalFlightHours` (Horas Totais de Voo).
 
 ### AircraftRegistration
-*(Value Object, Id)* Identificador único de um avião (matrícula), utilizado para distinguir instâncias de Aircraft dentro do sistema.
-
-### SeatConfiguration
-*(Value Object)* Define a configuração interna de lugares daquela instância específica, incluindo a divisão de lugares (ex: económica, executiva) e a capacidade total.
-
-### OperationalMetrics
-*(Value Object)* Regista os dados operacionais acumulados da instância, como o total de horas de voo e o limite de alcance atual.
-
-### AircraftFeatures
-*(Value Object)* Contém características adicionais e específicas daquela aeronave, como o tipo de motor instalado e se possui ligação Wi-Fi.
+*(Value Object)* Identificador único da aeronave no sistema, encapsulado na propriedade `code` (ex: a matrícula do avião, como `CS-TTO`). Cada `Aircraft` é identificada estritamente por este objeto.
 
 ### AircraftStatus
-*(Value Object)* Representa o estado operacional de um avião (ex: ativo, inativo, em manutenção). Controla a disponibilidade do avião para operações.
+*(Value Object / Enum)* Define de forma rígida o estado operacional da aeronave física. Os estados permitidos são:
+- `ACTIVE`: Aeronave operacional e disponível para voos.
+- `INACTIVE`: Aeronave temporariamente indisponível.
+- `IN_MAINTENANCE`: Aeronave retida para intervenções técnicas.
+- `RETIRED`: Aeronave abatida permanentemente da frota.
 
 ---
 
-## Aircraft Model Domain
+## 2. Aircraft Model Domain (Domínio de Modelos de Aeronave)
+*(Baseado no diagrama aircraft_DM.puml)*
 
 ### AircraftModel
-*(Entity, Aggregate Root)* Define um modelo de avião, incluindo características técnicas comuns a várias instâncias (Aircraft).
+*(Entity)* Representa o modelo de construção partilhado por várias aeronaves. Cada aeronave física (`Aircraft`) está ligada a um `AircraftModel` (is of type). Define as caraterísticas estruturais:
+- **manufacturer (Fabricante):** A empresa construtora (ex: Airbus, Boeing).
+- **maxRange (Alcance Máximo):** A distância máxima de operação do modelo.
+- **maxWeight (Peso Máximo):** O limite de peso estrutural suportado.
 
-### AircraftModelId
-*(Value Object, Id)* Identificador único de um modelo de avião, utilizado para distinguir diferentes modelos no sistema.
+### ModelId
+*(Value Object)* Identificador único utilizado para distinguir diferentes modelos de aeronaves no sistema (propriedade `id`). Serve como chave primária deste domínio.
 
-### Manufacturer
-*(Value Object)* Representa o fabricante do avião (ex: Airbus, Boeing).
-
-### AircraftSpecs
-*(Value Object)* Contém as especificações técnicas do modelo de avião, incluindo capacidade máxima de passageiros, capacidade de combustível, alcance máximo e velocidade de cruzeiro.
-
-### TechnicalDiagram
-*(Entity)* Representa recursos visuais associados ao modelo, como diagramas técnicos ou manuais, para auxílio operacional.
+### Capacity
+*(Value Object)* Objeto que encapsula a lotação do modelo de aeronave. Define o limite legal e físico de lugares através da propriedade `maxSeats` (Lotação Máxima). recursos visuais, como diagramas técnicos (`fileUrl`) ou manuais operacionais (`diagramType`).
 
 ---
 
-## Airport Domain
+## 3. Airport Domain (Domínio de Aeroportos)
+*(Reflete o diagrama de domínio de aeroportos e as regras das US 106 a 109, e série 200)*
 
 ### Airport
-*(Entity, Aggregate Root)* Representa um aeroporto identificado por um código único (AirportCode). Gere a sua própria infraestrutura de pistas, certificações de aeronaves e inclui informação como nome, localização e estado.
+*(Entity, Aggregate Root)* O agregado principal responsável por representar um aeroporto. Gere de forma atómica a sua infraestrutura física (pistas), o seu estado operacional, a sua localização geográfica e as certificações de modelos de aeronaves que lá podem aterrar.
 
 ### AirportCode
-*(Value Object, Id)* Código único do aeroporto (IATA), utilizado para identificar de forma inequívoca um aeroporto no sistema.
+*(Value Object, Id)* Identificador único do aeroporto (ex: código IATA `OPO`, `LIS`). Serve de chave primária inalterável para o agregado e é a referência usada por outros domínios (como a `Route`) para apontar para um aeroporto sem o duplicar.
 
 ### Location
-*(Value Object)* Representa a localização geográfica do aeroporto, incluindo cidade, país, latitude e longitude.
+*(Value Object)* Agrupa de forma coesa e imutável as coordenadas e a morada do aeroporto. Contém:
+- **city:** Cidade onde se insere.
+- **country:** País.
+- **latitude / longitude:** Coordenadas geográficas exatas.
 
-### Timezone
-*(Value Object)* Representa o fuso horário do aeroporto.
-
-### AirportType
-*(Value Object)* Define a classificação operacional ou tipo de aeroporto.
+### Timezone & AirportType
+*(Value Objects)*
+- **Timezone:** Fuso horário oficial de operação do aeroporto.
+- **AirportType:** Classificação estrutural do aeroporto (ex: Comercial, Militar, Doméstico).
 
 ### AirportStatus
-*(Value Object)* Indica o estado operacional do aeroporto (ex: operacional, encerrado, em manutenção).
+*(Value Object)* Indica a disponibilidade atual da infraestrutura para receber e enviar voos (ex: `OPERATIONAL`, `CLOSED`, `UNDER_MAINTENANCE`).
 
 ### Runway
-*(Entity)* Representa uma pista de um aeroporto, possuindo identidade própria dentro do aeroporto, incluindo características como nome de designação, comprimento e orientação.
+*(Entity)* Entidade local e dependente do `Airport`. Representa uma pista de aterragem/descolagem individual, identificada pelo seu nome ou designador (`designatorName`), possuindo medidas físicas de comprimento (`length`) e a sua orientação magnética (`orientation`).
 
 ### AircraftCertification
-*(Entity)* Documento ou registo que indica que um determinado modelo de avião está autorizado a operar num aeroporto específico, com um período de validade definido (data de início e fim).
+*(Entity)* Entidade local que funciona como uma licença. Garante que um determinado modelo de avião (guardando o seu `AircraftModelId`) está oficialmente autorizado e é tecnicamente compatível para operar nas pistas deste aeroporto. Esta licença é válida durante uma janela temporal definida por `validFrom` e `validTo`.
 
 ### MediaImage
-*(Entity)* Fotografias ou representações visuais das instalações do aeroporto.
+*(Entity)* Representação visual fotográfica, diagramas de terminais ou renderizações do aeroporto, detalhando o seu endereço web (`imageUrl`) e a sua descrição textual (`description`).
 
 ---
 
-## Route Domain
+## 4. Route Domain (Domínio de Rotas)
+*(Reflete o diagrama de domínio de rotas detalhado e ligações a Aeroportos)*
 
 ### Route
-*(Entity, Aggregate Root)* Representa uma rota aérea entre dois aeroportos. Define as condições necessárias para que um avião possa operar nessa rota e mantém o registo histórico das suas alterações.
+*(Entity, Aggregate Root)* Representa uma ligação de voo comercial predefinida. É o agregado principal que gere as regras operacionais, os horários planeados, e mantém o registo histórico da sua evolução no tempo. A rota não guarda os objetos do aeroporto inteiros, mas sim as referências rígidas `originId` e `destinationId` mapeadas para o *AirportCode* correspondente.
 
 ### RouteId
-*(Value Object, Id)* Identificador único da rota, utilizado para distinguir rotas no sistema.
+*(Value Object, Id)* Identificador único gerado para a rota (neste contexto mapeado para um `Long` sequencial).
 
-### RouteRequirement
-*(Value Object)* Define os requisitos mínimos para operar numa rota, como alcance mínimo e capacidade mínima exigida ao avião.
-
-### RouteSchedule
-*(Value Object)* Define os dias da semana em que a rota opera e a sua janela temporal planeada.
-
-### RouteHistory
-*(Entity)* Regista as versões anteriores e o histórico de modificações da rota, mantendo a rastreabilidade ao longo do tempo.
+### RouteRequirements
+*(Value Object)* Objeto que encapsula de forma atómica os requisitos mínimos e restrições que uma aeronave deve cumprir para ser elegível para esta rota:
+- **minimumRange:** Autonomia de voo mínima exigida.
+- **minimumCapacity:** Limite mínimo de lugares/passageiros exigido para garantir a viabilidade comercial do percurso.
 
 ### FlightDuration
-*(Value Object)* Representa a duração estimada de uma rota.
+*(Value Object)* Encapsula a duração estimada para a conclusão do percurso entre a origem e o destino.
+
+### RouteSchedule
+*(Value Object)* Define a janela de planeamento da rota. Contém:
+- **operatingDays:** Os dias específicos da semana em que a rota está ativa e planeada para operar.
+- **timeWindow:** A janela temporal diária atribuída para a realização dos voos desta rota.
 
 ### RouteType
-*(Value Object)* Classificação ou categoria da rota planeada.
+*(Value Object)* Classificação estrutural ou categoria da rota (ex: Doméstica, Internacional, Comercial, Carga), definida pela propriedade `type`.
 
 ### RouteStatus
-*(Value Object)* Indica o estado da rota, contendo um indicador específico de que a rota está ou não ativa.
+*(Value Object)* Estado lógico de ativação da rota. Indica se a rota se encontra operacional (`ACTIVE`) ou suspensa/desativada (`DEACTIVATED`), impactando a capacidade de agendar novos voos para a mesma.
 
----
+### RouteHistory
+*(Entity)* Entidade local contida dentro do agregado `Route` que serve como log de auditoria. Sempre que a rota sofre alterações, é criado um registo inalterável que contém a ação (`action`), uma descrição textual (`description`) e a data/hora do evento (`timestamp`).
 
-## Scheduled Flight Domain
+## 5. Scheduled Flight Domain (Domínio de Voos Planeados)
+*(Cobre operações de agendamento de frota)*
 
 ### ScheduledFlight
-*(Entity, Aggregate Root)* Representa a execução de uma rota num momento específico, associando um avião a uma rota numa determinada data e hora.
+*(Entity, Aggregate Root)* Representa a execução física e temporal de uma `Route`. Associa uma aeronave específica (`AircraftRegistration`) a uma rota (`RouteId`) num determinado momento.
 
 ### FlightId
-*(Value Object, Id)* Identificador único do voo, utilizado para distinguir voos no sistema.
+*(Value Object, Id)* Identificador único do voo no sistema de reservas e controlo de tráfego.
 
 ### FlightSchedule
-*(Value Object)* Define o horário do voo, incluindo data e hora de partida e chegada.
+*(Value Object)* Define a janela cronológica do voo, englobando a data/hora exata de partida (`departureLDT`) e chegada (`arrivalLDT`).
 
 ---
 
-## Maintenance Template Domain
+## 6. Maintenance Domain (Domínio de Manutenção)
+*(Cobre as US 115 a 119 e lógicas avançadas US 217 a 222, como Alertas e Cálculos de Frota)*
 
 ### MaintenanceTemplate
-*(Entity, Aggregate Root)* Define um modelo de manutenção reutilizável, incluindo tipo e checklist de tarefas a realizar, aplicável a um ou mais modelos de avião.
-
-### TemplateId
-*(Value Object, Id)* Identificador único do template de manutenção, utilizado para distinguir templates no sistema.
-
-### TemplateType
-*(Value Object)* Tipo de manutenção (ex: inspeção, manutenção programada, revisão geral, modificação).
-
-### Checklist
-*(Value Object)* Lista de tarefas a executar durante a manutenção.
-
----
-
-## Maintenance Record Domain
+*(Entity, Aggregate Root)* Define um plano/molde de manutenção reutilizável (US115_Template) que descreve o tipo de procedimento (`TemplateType`) e a `Checklist` rigorosa de tarefas a realizar. Associa-se aos modelos de aeronaves compatíveis.
 
 ### MaintenanceRecord
-*(Entity, Aggregate Root)* Representa um registo de manutenção em curso ou realizado num avião específico, incluindo descrição, notas de conclusão, agendamento e estado.
+*(Entity, Aggregate Root)* Representa uma instância real de intervenção de manutenção numa aeronave específica (US115_Record a US119). Monitoriza descrições, progresso, consumo temporal e relatórios pós-manutenção.
 
 ### RecordId
-*(Value Object, Id)* Identificador único do registo de manutenção, utilizado para distinguir registos no sistema.
+*(Value Object, Id)* Identificador unívoco do registo de intervenção.
 
-### MaintenanceSchedule
-*(Value Object)* Define o planeamento temporal da manutenção, incluindo data de início e duração esperada.
-
-### MaintenanceComponent
-*(Value Object)* Identifica o componente afetado pela manutenção (ex: motor, fuselagem, avionics, interior).
+### MaintenanceSchedule / MaintenancePeriod
+*(Value Object)* Define o planeamento temporal da manutenção, incluindo a data de início oficial e a estimativa ou total de horas consumidas (`expectedDuration`), crucial para gerar o total de horas da frota (US117).
 
 ### MaintenanceStatus
-*(Value Object)* Indica o estado atual da manutenção (ex: em curso, concluída).
+*(Value Object / Enum)* Estado de ciclo de vida da reparação (ex: Agendado, Em Curso, Concluído).
+
+### Notas de Conclusão (Completion Notes)
+Relatório ou observações finais submetidas obrigatoriamente para possibilitar o fecho legal do registo de manutenção.
 
 ---
 
-## Relações entre Conceitos
+## Relações e Práticas de Domain-Driven Design (DDD)
 
-- Um **Aircraft** refere um **AircraftModel**
-- Uma **Route** liga a dois **Airport** (Origem e Destino)
-- Um **ScheduledFlight** associa um **Aircraft** a uma **Route**
-- Um **MaintenanceRecord** aplica-se a um **Aircraft** e utiliza um **MaintenanceTemplate**
-- Um **MaintenanceTemplate** pode aplicar-se a vários **AircraftModel**
+A arquitetura do sistema assegura o isolamento de domínios (Baixo Acoplamento) e a proteção das invariantes através da **Regra de Ouro do DDD**: ligações entre *Aggregate Roots* diferentes são feitas **exclusivamente por Identificadores (IDs)**, enquanto elementos internos do mesmo agregado utilizam composição direta.
 
----
+**1. Relações Inter-Agregados (Baixo Acoplamento por IDs):**
+- **Airport ⇄ Route:** Uma `Route` não duplica nem carrega os dados pesados dos aeroportos; referencia rigidamente os identificadores `originId` e `destinationId` (usando o `AirportCode` / IATA).
+- **Aircraft ⇄ AircraftModel:** Um `Aircraft` físico está acoplado ao seu modelo guardando apenas o identificador `modelId` (`AircraftModelId`).
+- **ScheduledFlight ⇄ Aircraft & Route:** Um `ScheduledFlight` é estritamente a fusão temporal por ID de um avião (usando a `AircraftRegistration`) e de uma rota (usando o `RouteId`).
+- **MaintenanceRecord ⇄ Aircraft & Template:** O `MaintenanceRecord` liga o plano de manutenção ao avião operado utilizando respetivamente o `TemplateId` e a `AircraftRegistration`.
+- **MaintenanceTemplate ⇄ AircraftModel:** Um `MaintenanceTemplate` define a que modelos de avião se aplica guardando uma lista de identificadores (`AircraftModelId`), evitando acoplamento estrutural.
+- **Airport ⇄ AircraftModel (Certificações):** A entidade local `AircraftCertification` dentro do Aeroporto define que modelos estão autorizados a aterrar guardando apenas a referência ao `AircraftModelId`.
 
-## Notas de Modelação
-
-- As **Entities** são identificadas por um identificador único e possuem identidade e ciclo de vida próprios (incluindo entidades locais dentro de agregados, como *Runway* e *RouteHistory*).
-- Os **Value Objects** são definidos apenas pelos seus atributos, não têm identidade própria e são imutáveis.
-- Os **Aggregates** definem limites de consistência lógica. Cada agregado é acedido unicamente através da sua Entidade Principal (**Aggregate Root**).
-- As relações *entre* agregados diferentes são sempre realizadas através de identificadores (ex: `Route` guarda o ID de `Airport`), garantindo o baixo acoplamento estipulado pelo Domain-Driven Design (DDD).
+**2. Relações Intra-Agregados (Composição Forte):**
+- Sempre que as entidades pertencem ao mesmo limite de consistência (*Aggregate Root*), a relação é feita por composição direta de objetos.
+- Exemplos do projeto incluem: O `Airport` contém diretamente a lista de objetos `Runway` e `Facility`; A `Route` possui diretamente a lista de `RouteHistory`. Apenas o agregado principal pode modificar estas entidades locais.
