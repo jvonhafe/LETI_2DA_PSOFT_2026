@@ -222,7 +222,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"iataCode\": \"LIS\",\n    \"name\": \"Humberto Delgado\",\n    \"city\": \"Lisboa\",\n    \"country\": \"Portugal\",\n    \"timezone\": \"GMT\",\n    \"status\": \"OPERATIONAL\"\n}"
+              "raw": "{\n    \"iataCode\": \"OPO\",\n    \"name\": \"Francisco Sá Carneiro\",\n    \"city\": \"Porto\",\n    \"country\": \"Portugal\",\n    \"timezone\": \"GMT\",\n    \"status\": \"OPERATIONAL\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/airports",
@@ -331,7 +331,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"iataCode\": \"CDG\",\n  \"name\": \"Charles de Gaulle\",\n  \"city\": \"Paris\",\n  \"country\": \"France\",\n  \"timezone\": \"CET\",\n  \"facilities\": [\n    { \"type\": \"Terminal\", \"capacity\": 50000, \"description\": \"Terminal 1\" }\n  ],\n  \"images\": [\n    { \"imageUrl\": \"https://example.com/foto.jpg\", \"description\": \"Vista aérea\" }\n  ]\n}"
+              "raw": "{\n  \"iataCode\": \"CDG\",\n  \"name\": \"Charles de Gaulle\",\n  \"city\": \"Paris\",\n  \"country\": \"France\",\n  \"timezone\": \"CET\",\n  \"facilities\": [\n    { \"type\": \"Terminal\", \"capacity\": 50000, \"description\": \"Terminal 1\" }\n  ],\n  \"images\": [\n    { \"imageUrl\": \"https://dicaparis.com/wp-content/uploads/sites/31/2017/02/Aeroporto-Charles-de-Gaulle.jpg\", \"description\": \"Vista aérea\" }\n  ]\n}"
             },
             "url": {
               "raw": "{{base_url}}/airports/detailed",
@@ -570,7 +570,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"originAirport\": \"LIS\",\n  \"destinationAirport\": \"OPO\",\n  \"estimatedFlightTimeMinutes\": 50,\n  \"minimumRange\": 400,\n  \"minimumCapacity\": 120\n}"
+              "raw": "{\n  \"originAirport\": \"OPO\",\n  \"destinationAirport\": \"CDG\",\n  \"estimatedFlightTimeMinutes\": 135,\n  \"minimumRange\": 1240,\n  \"minimumCapacity\": 140\n}"
             },
             "url": {
               "raw": "{{base_url}}/routes",
