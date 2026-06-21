@@ -11,7 +11,9 @@ import com.aisafe.model.UpdateAircraftModelDTO;
 import com.aisafe.model.AircraftModelUtilizationDTO;
 import com.aisafe.model.AircraftOperationalHoursDTO;
 import com.aisafe.repository.AircraftModelRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -40,7 +42,9 @@ public class AircraftModelController {
         this.calculateFleetOperationalHoursUseCase = calculateFleetOperationalHoursUseCase;
     }
 
+    @Operation(summary = "Registar Modelo de Aeronave")
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'BACKOFFICE')")
     public AircraftModel registerModel(@RequestBody AircraftModelDTO dto) {
         String url = (dto.image != null) ? dto.image.imageUrl : null;
         String desc = (dto.image != null) ? dto.image.description : null;
@@ -50,11 +54,14 @@ public class AircraftModelController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'BACKOFFICE', 'ATCC')")
     public List<AircraftModel> getAllModels() {
         return modelRepository.findAll();
     }
 
+    @Operation(summary = "Atualizar Especificações do Modelo")
     @PutMapping("/{modelId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'BACKOFFICE')")
     public ResponseEntity<AircraftModel> updateModelSpecifications(
             @PathVariable String modelId,
             @RequestBody UpdateAircraftModelDTO updateDTO) {
@@ -79,19 +86,25 @@ public class AircraftModelController {
         public ImageDTO image;
     }
 
+    @Operation(summary = "Top 5 Modelos Mais Utilizados")
     @GetMapping("/top5")
+    @PreAuthorize("hasAnyRole('ADMIN', 'BACKOFFICE')")
     public ResponseEntity<List<AircraftModelUtilizationDTO>> getTop5MostUtilized() {
         List<AircraftModelUtilizationDTO> top5 = getTop5UtilizedModelsUseCase.execute();
         return ResponseEntity.ok(top5);
     }
 
+    @Operation(summary = "Disponibilidade da Frota")
     @GetMapping("/fleet/availability")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATCC')")
     public ResponseEntity<FleetAvailabilityDTO> getFleetAvailability() {
         FleetAvailabilityDTO availability = getFleetAvailabilityUseCase.execute();
         return ResponseEntity.ok(availability);
     }
 
+    @Operation(summary = "Calcular Horas Operacionais")
     @GetMapping("/operational-hours")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ATCC')")
     public ResponseEntity<List<AircraftOperationalHoursDTO>> getOperationalHours() {
         List<AircraftOperationalHoursDTO> hours = calculateFleetOperationalHoursUseCase.execute();
         return ResponseEntity.ok(hours);
