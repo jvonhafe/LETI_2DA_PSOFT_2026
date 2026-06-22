@@ -561,178 +561,80 @@
           "request": {
             "method": "PUT",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"maxCapacity\": 200,\n  \"fuelCapacity\": 30000.0,\n  \"maxRange\": 6500.0,\n  \"cruisingSpeed\": 880.0\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
+              "raw": "{\n  \"maxCapacity\": 200,\n  \"fuelCapacity\": 30000.0,\n  \"maxRange\": 6500.0,\n  \"cruisingSpeed\": 880.0\n}"
             },
             "url": {
               "raw": "{{base_url}}/aircraft-models/A320",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "aircraft-models",
-                "A320"
-              ]
-            },
-            "description": "Generated from cURL: curl --location --request PUT '{{base_url}}/aircraft-models/A320' \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"maxCapacity\": 200,\n  \"fuelCapacity\": 30000.0,\n  \"maxRange\": 6500.0,\n  \"cruisingSpeed\": 880.0\n}'"
-          },
-          "response": []
+              "host": ["{{base_url}}"],
+              "path": ["aircraft-models", "A320"]
+            }
+          }
         },
         {
           "name": "US202 - Registar modelo com imagem",
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"modelId\": \"B737\",\r\n  \"modelName\": \"Boeing 737\",\r\n  \"manufacturer\": \"Boeing\",\r\n  \"maxCapacity\": 189,\r\n  \"fuelCapacity\": 26000.0,\r\n  \"maxRange\": 5500.0,\r\n  \"cruisingSpeed\": 842.0,\r\n  \"image\": {\r\n    \"imageUrl\": \"https://example.com/boeing737.png\",\r\n    \"description\": \"Diagrama técnico do Boeing 737\"\r\n  }\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
+              "raw": "{\r\n  \"modelId\": \"B737\",\r\n  \"modelName\": \"Boeing 737\",\r\n  \"manufacturer\": \"Boeing\",\r\n  \"maxCapacity\": 189,\r\n  \"fuelCapacity\": 26000.0,\r\n  \"maxRange\": 5500.0,\r\n  \"cruisingSpeed\": 842.0,\r\n  \"image\": {\r\n    \"imageUrl\": \"https://example.com/boeing737.png\",\r\n    \"description\": \"Diagrama técnico do Boeing 737\"\r\n  }\r\n}"
             },
             "url": {
-              "raw": "http://localhost:8080/api/aircraft-models",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "aircraft-models"
-              ]
-            },
-            "description": "Generated from cURL: curl --location --request POST 'http://localhost:8080/api/aircraft-models' \\\r\n--header 'Content-Type: application/json' \\\r\n--data-raw '{\r\n  \"modelId\": \"B737\",\r\n  \"modelName\": \"Boeing 737\",\r\n  \"manufacturer\": \"Boeing\",\r\n  \"maxCapacity\": 189,\r\n  \"fuelCapacity\": 26000.0,\r\n  \"maxRange\": 5500.0,\r\n  \"cruisingSpeed\": 842.0,\r\n  \"image\": {\r\n    \"imageUrl\": \"https://example.com/boeing737.png\",\r\n    \"description\": \"Diagrama técnico do Boeing 737\"\r\n  }\r\n}'"
-          },
-          "response": []
+              "raw": "{{base_url}}/aircraft-models",
+              "host": ["{{base_url}}"],
+              "path": ["aircraft-models"]
+            }
+          }
         },
         {
           "name": "US203 - Rotas Compatíveis",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              }
-            ],
             "url": {
-              "raw": "http://localhost:8080/api/aircraft/CS-TTO/compatible-routes",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "aircraft",
-                "CS-TTO",
-                "compatible-routes"
-              ]
-            },
-            "description": "Generated from cURL: curl --location --request GET 'http://localhost:8080/api/aircraft/CS-TTO/compatible-routes' \\\r\n--header 'Authorization: Bearer {{token}}'"
-          },
-          "response": []
+              "raw": "{{base_url}}/aircraft/CS-TTO/compatible-routes",
+              "host": ["{{base_url}}"],
+              "path": ["aircraft", "CS-TTO", "compatible-routes"]
+            }
+          }
         },
         {
           "name": "US204 - Top 5 Modelos Mais Utilizados",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              }
-            ],
             "url": {
-              "raw": "http://localhost:8080/api/aircraft-models/top5",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "aircraft-models",
-                "top5"
-              ]
-            },
-            "description": "Generated from cURL: curl --location --request GET 'http://localhost:8080/api/aircraft-models/top5' \\\r\n--header 'Authorization: Bearer {{token}}'"
-          },
-          "response": []
+              "raw": "{{base_url}}/aircraft-models/top5",
+              "host": ["{{base_url}}"],
+              "path": ["aircraft-models", "top5"]
+            }
+          }
         },
         {
           "name": "US205 - Disponibilidade da Frota",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              }
-            ],
             "url": {
-              "raw": "http://localhost:8080/api/aircraft-models/fleet/availability",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "aircraft-models",
-                "fleet",
-                "availability"
-              ]
-            },
-            "description": "Generated from cURL: curl --location --request GET 'http://localhost:8080/api/aircraft/fleet/availability' \\\r\n--header 'Authorization: Bearer {{token}}'"
-          },
-          "response": []
+              "raw": "{{base_url}}/aircraft-models/fleet/availability",
+              "host": ["{{base_url}}"],
+              "path": ["aircraft-models", "fleet", "availability"]
+            }
+          }
         },
         {
           "name": "US206 - Calcular horas",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              }
-            ],
             "url": {
-              "raw": "http://localhost:8080/api/aircraft-models/operational-hours",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "aircraft-models",
-                "operational-hours"
-              ]
-            },
-            "description": "Generated from cURL: curl --location --request GET 'http://localhost:8080/api/aircraft/operational-hours' \\\r\n--header 'Authorization: Bearer {{token}}'"
-          },
-          "response": []
+              "raw": "{{base_url}}/aircraft-models/operational-hours",
+              "host": ["{{base_url}}"],
+              "path": ["aircraft-models", "operational-hours"]
+            }
+          }
         }
       ]
     },
@@ -748,7 +650,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"originAirport\": \"OPO\",\n  \"destinationAirport\": \"CDG\",\n  \"estimatedFlightTimeMinutes\": 135,\n  \"minimumRange\": 1240,\n  \"minimumCapacity\": 140\n}"
+              "raw": "{\n  \"originAirport\": \"OPO\",\n  \"destinationAirport\": \"CDG\",\n  \"estimatedFlightTimeMinutes\": 135,\n  \"minimumRange\": 1240,\n  \"minimumCapacity\": 140,\n \"distanceKm\": 1214.0\n}"
             },
             "url": {
               "raw": "{{base_url}}/routes",
@@ -765,6 +667,116 @@
               "raw": "{{base_url}}/routes/1/deactivate",
               "host": ["{{base_url}}"],
               "path": ["routes", "1", "deactivate"]
+            }
+          }
+        },
+        {
+          "name": "US212 - Agendar Voo (Scheduled Flight)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US212 - Voo agendado com sucesso (201 Created)\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"routeId\": 1,\n  \"aircraftRegistration\": \"CS-TTO\",\n  \"departureTime\": \"2026-07-15T10:30:00\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/scheduled-flights",
+              "host": ["{{base_url}}"],
+              "path": ["scheduled-flights"]
+            }
+          }
+        },
+        {
+          "name": "US214 - Rotas Ativas Ordenadas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US214 - Rotas devolvidas com sucesso (200 OK)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/routes/active/sorted?sortBy=distance",
+              "host": ["{{base_url}}"],
+              "path": ["routes", "active", "sorted"],
+              "query": [
+                { "key": "sortBy", "value": "distance" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "US215 - Distância Total da Rede",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US215 - Distância total calculada (200 OK)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/routes/total-distance",
+              "host": ["{{base_url}}"],
+              "path": ["routes", "total-distance"]
+            }
+          }
+        },
+        {
+          "name": "US216 - Rotas Alternativas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"US216 - Alternativas devolvidas com sucesso (200 OK)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/routes/alternative?origin=OPO&destination=CDG",
+              "host": ["{{base_url}}"],
+              "path": ["routes", "alternative"],
+              "query": [
+                { "key": "origin", "value": "OPO" },
+                { "key": "destination", "value": "CDG" }
+              ]
             }
           }
         }

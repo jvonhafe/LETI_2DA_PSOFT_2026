@@ -53,7 +53,7 @@ public class AirportController {
     }
 
     // US207: Registar Aeroporto Detalhado (Com Fotos e Instalações)
-    @PreAuthorize("hasRole('BACKOFFICE')")
+    @PreAuthorize("hasAnyRole('BACKOFFICE', 'ADMIN')")
     @PostMapping("/detailed")
     @ResponseStatus(HttpStatus.CREATED)
     public Airport createDetailedAirport(@RequestBody RegisterDetailedAirportUseCase.DetailedAirportDto request) {
@@ -97,7 +97,7 @@ public class AirportController {
     }
 
     // US208: Atualizar Detalhes do Aeroporto (Contactos e Horários)
-    @PreAuthorize("hasRole('BACKOFFICE')")
+    @PreAuthorize("hasAnyRole('BACKOFFICE', 'ADMIN')")
     @PatchMapping("/{iata}/details")
     public Airport updateAirportDetails(
             @PathVariable String iata,
@@ -107,7 +107,7 @@ public class AirportController {
     }
 
     // --- NOVO: US210: Estatísticas dos Aeroportos mais movimentados ---
-    @PreAuthorize("hasRole('BACKOFFICE')") // Apenas o Backoffice gera estatísticas
+    @PreAuthorize("hasAnyRole('BACKOFFICE', 'ADMIN')") // Apenas o Backoffice gera estatísticas
     @GetMapping("/statistics/busiest")
     public List<BusiestAirportDto> getBusiestAirports(
             @RequestParam(defaultValue = "5") int limit) {
